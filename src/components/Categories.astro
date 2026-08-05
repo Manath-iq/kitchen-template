@@ -2,6 +2,7 @@
 import { clientConfig } from '../config/client';
 import SheetHead from './ui/SheetHead.astro';
 import ShapePlan from './svg/ShapePlan.astro';
+import { withBase } from '../lib/url';
 
 const items = clientConfig.categories;
 const inside = ['Проект под ваши размеры', 'Подбор материалов', 'Смета до запуска'];
@@ -28,7 +29,20 @@ const inside = ['Проект под ваши размеры', 'Подбор м�
           </div>
 
           <div class="cats__plan">
-            <ShapePlan shape={item.id} />
+            {
+              item.image ? (
+                <img
+                  src={withBase(item.image)}
+                  width="560"
+                  height="560"
+                  loading="lazy"
+                  decoding="async"
+                  alt={`${item.title}: изометрическая схема комплекта`}
+                />
+              ) : (
+                <ShapePlan shape={item.id} />
+              )
+            }
           </div>
 
           <h3 class="h3 cats__title">{item.title}</h3>
@@ -100,8 +114,24 @@ const inside = ['Проект под ваши размеры', 'Подбор м�
     line-height: 1;
   }
 
+  /* Изометрия лежит на «бумаге» карточки: PNG без фона, поэтому подложка
+     остаётся видимой и карточка не превращается в плашку с картинкой. */
   .cats__plan {
-    max-width: 172px;
+    max-width: 210px;
+    margin-block: -6px -10px;
+    align-self: center;
+  }
+
+  .cats__plan img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 10px 18px rgba(75, 75, 75, 0.16));
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .cats__card:hover .cats__plan img {
+    transform: translateY(-4px) scale(1.03);
   }
 
   .cats__title {

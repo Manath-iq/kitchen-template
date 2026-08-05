@@ -3,6 +3,7 @@ import { clientConfig } from '../config/client';
 import { formatDays } from '../lib/format';
 import SheetHead from './ui/SheetHead.astro';
 import KitchenRender from './svg/KitchenRender.astro';
+import { withBase } from '../lib/url';
 
 const works = clientConfig.portfolio;
 ---
@@ -45,7 +46,20 @@ const works = clientConfig.portfolio;
       {works.map((work, i) => (
         <article class="port__card paper" data-anim="rise" style={`--i:${i}`}>
           <div class="port__media">
-            <KitchenRender tone={work.tone} id={work.id} />
+            {
+              work.image ? (
+                <img
+                  src={withBase(work.image)}
+                  width="1000"
+                  height="667"
+                  loading="lazy"
+                  decoding="async"
+                  alt={`${work.title}: ${work.shape.toLowerCase()} кухня ${work.meters}, ${work.materials}`}
+                />
+              ) : (
+                <KitchenRender tone={work.tone} id={work.id} />
+              )
+            }
             <span class="tag port__badge">{work.shape.toUpperCase()} / {work.meters.toUpperCase()}</span>
           </div>
           <div class="port__body">
@@ -121,6 +135,15 @@ const works = clientConfig.portfolio;
   .port__media {
     position: relative;
     border-bottom: 1px solid var(--line);
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+
+  .port__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .port__badge {

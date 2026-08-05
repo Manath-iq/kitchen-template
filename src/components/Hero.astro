@@ -2,7 +2,8 @@
 import { clientConfig, heroTitle } from '../config/client';
 import { formatNumber } from '../lib/format';
 import { waDefault } from '../lib/waMessage';
-import KitchenSpec from './svg/KitchenSpec.astro';
+import SpecOverlay from './svg/SpecOverlay.astro';
+import { withBase } from '../lib/url';
 
 const c = clientConfig;
 const priceFrom = c.pricing.price24m;
@@ -67,10 +68,21 @@ const priceTo = c.pricing.price4m * 2;
           <span class="tag">УГЛОВАЯ / 3,6 М / МДФ</span>
         </div>
 
-        <KitchenSpec class="hero__spec" />
+        <div class="hero__frame">
+          <img
+            class="hero__photo"
+            src={withBase('/assets/hero-kitchen.webp')}
+            width="1400"
+            height="933"
+            fetchpriority="high"
+            decoding="async"
+            alt="Кухня на заказ в интерьере: матовые фасады МДФ, тёмная столешница, латунные ручки"
+          />
+          <SpecOverlay class="hero__overlay" />
+        </div>
 
         <div class="hero__legend">
-          {['Корпус', 'Верхние модули', 'Фасады', 'Фурнитура', 'Столешница'].map((label, i) => (
+          {['Лист замера', 'Размеры', 'Модули', 'Фурнитура', 'Спецификация'].map((label, i) => (
             <span class="hero__legend-item" data-legend={i + 1}>
               <span class="num hero__legend-num">{String(i + 1).padStart(2, '0')}</span>
               {label}
@@ -189,7 +201,24 @@ const priceTo = c.pricing.price4m * 2;
   }
 
   .hero__sheet {
-    padding: clamp(16px, 2.4vw, 26px);
+    padding: clamp(14px, 2vw, 22px);
+  }
+
+  /* Фото — результат, поверх него техкарта: так первый экран сразу показывает
+     готовую кухню, а на скролле проявляется, из чего она посчитана. */
+  .hero__frame {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--color-cool);
+  }
+
+  .hero__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .hero__sheet-head {

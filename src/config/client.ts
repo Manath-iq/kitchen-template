@@ -107,6 +107,8 @@ export type ClientConfig = {
     description: string;
     note: string;
     swatch: string;
+    /** Макро-фото образца. Нет файла — рисуется CSS-образец по swatch. */
+    image?: string;
   }>;
 
   categories: Array<{
@@ -115,6 +117,8 @@ export type ClientConfig = {
     title: string;
     meta: string;
     layers: [string, string, string, string];
+    /** PNG без фона. Нет файла — рисуется план-схема SVG. */
+    image?: string;
   }>;
 
   portfolio: Array<{
@@ -126,6 +130,8 @@ export type ClientConfig = {
     materials: string;
     price: string;
     tone: string;
+    /** Фото проекта. Нет файла — рисуется вектор по tone. */
+    image?: string;
   }>;
 
   faq: Array<{ q: string; a: string }>;
@@ -273,6 +279,7 @@ export const clientConfig: ClientConfig = {
       description: 'Практичный базовый корпус',
       note: '16 мм · влагостойкий торец · Е0.5',
       swatch: 'ldsp',
+      image: '/assets/mat-ldsp.webp',
     },
     {
       id: 'mdf',
@@ -281,6 +288,7 @@ export const clientConfig: ClientConfig = {
       description: 'Фасады под плёнку, эмаль или фрезеровку',
       note: '18–19 мм · матовая и глянцевая отделка',
       swatch: 'mdf',
+      image: '/assets/mat-mdf.webp',
     },
     {
       id: 'top',
@@ -289,6 +297,7 @@ export const clientConfig: ClientConfig = {
       description: 'Влагостойкая, с кромкой по периметру',
       note: '38 мм · постформинг · R3',
       swatch: 'top',
+      image: '/assets/mat-top.webp',
     },
     {
       id: 'hinge',
@@ -297,6 +306,7 @@ export const clientConfig: ClientConfig = {
       description: 'Петли и направляющие полного выдвижения',
       note: 'до 60 000 циклов открывания',
       swatch: 'hinge',
+      image: '/assets/mat-hinge.webp',
     },
     {
       id: 'edge',
@@ -305,6 +315,7 @@ export const clientConfig: ClientConfig = {
       description: 'Защита торца от влаги и сколов',
       note: '0,4 и 2 мм · в цвет плиты',
       swatch: 'edge',
+      image: '/assets/mat-edge.webp',
     },
     {
       id: 'extras',
@@ -313,12 +324,14 @@ export const clientConfig: ClientConfig = {
       description: 'Наполнение, которое меняет цену',
       note: 'считается отдельной строкой в смете',
       swatch: 'extras',
+      image: '/assets/mat-extras.webp',
     },
   ],
 
   categories: [
     {
       id: 'straight',
+      image: '/assets/cat-straight.webp',
       code: '01',
       title: 'Прямая кухня',
       meta: 'ПРЯМАЯ / 2,4–3,6 М',
@@ -326,6 +339,7 @@ export const clientConfig: ClientConfig = {
     },
     {
       id: 'corner',
+      image: '/assets/cat-corner.webp',
       code: '02',
       title: 'Угловая кухня',
       meta: 'УГЛОВАЯ / 3–4 М',
@@ -333,6 +347,7 @@ export const clientConfig: ClientConfig = {
     },
     {
       id: 'uShape',
+      image: '/assets/cat-ushape.webp',
       code: '03',
       title: 'П-образная кухня',
       meta: 'П-ОБРАЗНАЯ / 4–6 М',
@@ -340,6 +355,7 @@ export const clientConfig: ClientConfig = {
     },
     {
       id: 'island',
+      image: '/assets/cat-island.webp',
       code: '04',
       title: 'Кухня с островом',
       meta: 'ОСТРОВ / ОТ 4,5 М',
@@ -347,6 +363,7 @@ export const clientConfig: ClientConfig = {
     },
     {
       id: 'newbuild',
+      image: '/assets/cat-newbuild.webp',
       code: '05',
       title: 'Для новостройки',
       meta: 'НОВОСТРОЙКА / ЧЕРНОВАЯ',
@@ -354,6 +371,7 @@ export const clientConfig: ClientConfig = {
     },
     {
       id: 'house',
+      image: '/assets/cat-house.webp',
       code: '06',
       title: 'Для частного дома',
       meta: 'ДОМ / НЕСТАНДАРТ',
@@ -364,6 +382,7 @@ export const clientConfig: ClientConfig = {
   portfolio: [
     {
       id: 'p1',
+      image: '/assets/work-1.webp',
       title: 'Кухня в новостройке',
       shape: 'Угловая',
       meters: '3,4 м',
@@ -374,6 +393,7 @@ export const clientConfig: ClientConfig = {
     },
     {
       id: 'p2',
+      image: '/assets/work-2.webp',
       title: 'Замена кухни в панельном доме',
       shape: 'Прямая',
       meters: '2,6 м',
@@ -384,6 +404,7 @@ export const clientConfig: ClientConfig = {
     },
     {
       id: 'p3',
+      image: '/assets/work-3.webp',
       title: 'Кухня в частном доме',
       shape: 'П-образная',
       meters: '5,2 м',
@@ -394,6 +415,7 @@ export const clientConfig: ClientConfig = {
     },
     {
       id: 'p4',
+      image: '/assets/work-4.webp',
       title: 'Кухня-остров, студия',
       shape: 'С островом',
       meters: '4,8 м',
@@ -404,6 +426,7 @@ export const clientConfig: ClientConfig = {
     },
     {
       id: 'p5',
+      image: '/assets/work-5.webp',
       title: 'Кухня под сдачу',
       shape: 'Прямая',
       meters: '2,4 м',
@@ -414,6 +437,7 @@ export const clientConfig: ClientConfig = {
     },
     {
       id: 'p6',
+      image: '/assets/work-6.webp',
       title: 'Кухня с нестандартным углом',
       shape: 'Угловая',
       meters: '3,9 м',

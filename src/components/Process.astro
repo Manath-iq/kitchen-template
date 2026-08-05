@@ -101,7 +101,7 @@ const steps = [
     width: 1px;
     height: var(--fill, 0%);
     background: var(--color-brass);
-    transition: height 0.2s linear;
+    transition: height 0.2s linear, width 0.2s linear;
   }
 
   .proc__item {
@@ -167,10 +167,36 @@ const steps = [
     letter-spacing: 0.04em;
   }
 
+  /* Десктоп: таймлайн разворачивается по горизонтали.
+     В две колонки вертикальная рельса шла мимо карточек правого столбца —
+     линия и точки просто не сходились с этапами. */
   @media (min-width: 900px) {
     .proc {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px 20px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      padding: 36px 0 0;
+    }
+
+    .proc__rail {
+      inset: 11px 0 auto 0;
+      width: auto;
+      height: 1px;
+    }
+
+    .proc__rail-fill {
+      inset: 0 auto 0 0;
+      width: var(--fill, 0%);
+      height: 1px;
+    }
+
+    .proc__dot {
+      left: 0;
+      top: -30px;
+    }
+
+    .proc__body {
+      height: 100%;
+      align-content: start;
     }
   }
 </style>

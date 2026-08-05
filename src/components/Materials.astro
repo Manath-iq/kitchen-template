@@ -1,6 +1,7 @@
 ---
 import { clientConfig } from '../config/client';
 import SheetHead from './ui/SheetHead.astro';
+import { withBase } from '../lib/url';
 
 const materials = clientConfig.materials;
 ---
@@ -20,7 +21,17 @@ const materials = clientConfig.materials;
     <div class="mat">
       {materials.map((item, i) => (
         <article class="mat__card paper" data-anim="rise" style={`--i:${i}`}>
-          <div class={`mat__swatch mat__swatch--${item.swatch}`} aria-hidden="true">
+          <div class={`mat__swatch mat__swatch--${item.swatch}`}>
+            {item.image && (
+              <img
+                src={withBase(item.image)}
+                width="720"
+                height="720"
+                loading="lazy"
+                decoding="async"
+                alt={`${item.title} — ${item.description.toLowerCase()}`}
+              />
+            )}
             <span class="num mat__code">{item.code}</span>
           </div>
           <div class="mat__body">
@@ -75,8 +86,21 @@ const materials = clientConfig.materials;
 
   .mat__swatch {
     position: relative;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
     border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .mat__swatch img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: scale 0.5s var(--ease-out);
+  }
+
+  .mat__card:hover .mat__swatch img {
+    scale: 1.04;
   }
 
   .mat__code {

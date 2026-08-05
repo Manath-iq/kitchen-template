@@ -81,7 +81,7 @@
       const hero = document.querySelector<HTMLElement>('[data-hero]');
 
       if (spec && hero) {
-        const layer = (name: string) => spec.querySelector(`.ks-layer[data-layer="${name}"]`);
+        const layer = (name: string) => spec.querySelector(`.ovl-layer[data-layer="${name}"]`);
         const legend = (n: number) => spec.querySelector(`[data-legend="${n}"]`);
         const summary = spec.querySelector<HTMLElement>('[data-summary]');
         const waLabel = spec.querySelector<HTMLElement>('[data-wa-label]');
@@ -119,19 +119,20 @@
               build.fromTo(
                 layer(name),
                 { opacity: from.opacity ?? 0, ...from },
-                { opacity: 1, x: 0, y: 0, scaleY: 1, duration: 0.5 },
+                { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5 },
               );
               const item = legend(index);
               if (item) build.set(item, { attr: { 'data-on': 'true' } }, '<');
             };
 
-            step('carcass', 1, { opacity: 0.18, y: 10 });
-            step('uppers', 2, { y: -18 });
-            step('facades', 3, { x: 26 });
-            step('hardware', 4, { scaleY: 0.9, transformOrigin: 'center' });
-            step('top', 5, { y: -14 });
+            // 01 «Лист замера» виден с самого начала — с него и стартуем
+            const first = legend(1);
+            if (first) build.set(first, { attr: { 'data-on': 'true' } });
 
-            build.fromTo(layer('callouts'), { opacity: 0 }, { opacity: 1, duration: 0.4 });
+            step('dims', 2, { y: -14 });
+            step('modules', 3, { x: 22 });
+            step('hardware', 4, { scale: 0.94, transformOrigin: 'center' });
+            step('callouts', 5, { y: 16 });
 
             if (summary) {
               build.fromTo(summary, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45 });

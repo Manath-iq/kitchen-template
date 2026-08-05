@@ -488,14 +488,10 @@ body::before {
   opacity: 0;
 }
 
-/* Слои спецификации собираются на первом скролле.
-   Корпус остаётся бледным «карандашным» контуром, чтобы лист не выглядел пустым. */
-.is-motion [data-spec] .ks-layer:not([data-layer='sheet']):not([data-layer='dims']) {
+/* Техкарта проявляется поверх фото на первом скролле.
+   Рамка листа видна сразу — иначе кадр выглядит как обычная картинка. */
+.is-motion [data-spec] .ovl-layer:not([data-layer='grid']) {
   opacity: 0;
-}
-
-.is-motion [data-spec] .ks-layer[data-layer='carcass'] {
-  opacity: 0.18;
 }
 
 .is-motion [data-summary] {
@@ -504,7 +500,7 @@ body::before {
 
 .no-motion [data-anim],
 .no-motion [data-summary],
-.no-motion .ks-layer {
+.no-motion .ovl-layer {
   opacity: 1 !important;
 }
 

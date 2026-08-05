@@ -2,6 +2,7 @@
 import { clientConfig } from '../../config/client';
 import { facadeOptions, hardwareOptions, shapeOptions, calcLimits } from '../../lib/pricing';
 import SheetHead from '../ui/SheetHead.astro';
+import { withBase } from '../../lib/url';
 
 const c = clientConfig;
 
@@ -23,6 +24,20 @@ const toggles = [
 
     <form class="calc" data-calc novalidate>
       <div class="calc__params paper ticks">
+        <figure class="calc__shot">
+          <img
+            src={withBase('/assets/calc-measure.webp')}
+            width="900"
+            height="600"
+            loading="lazy"
+            decoding="async"
+            alt="Замер кухни в новостройке: рулетка вдоль стены, лазерный уровень, планшет с эскизом"
+          />
+          <figcaption class="tag">
+            Ползунок — это ваша стена. Точная геометрия снимается на замере.
+          </figcaption>
+        </figure>
+
         <!-- ДЛИНА -->
         <div class="calc__field">
           <div class="calc__field-head">
@@ -176,6 +191,31 @@ const toggles = [
     padding: clamp(20px, 3vw, 32px);
     display: grid;
     gap: 26px;
+  }
+
+  .calc__shot {
+    margin: 0;
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+
+  .calc__shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  .calc__shot figcaption {
+    display: block;
+    padding: 12px 14px;
+    background: rgba(232, 236, 239, 0.6);
+    border-top: 1px solid var(--line);
+    text-transform: none;
+    letter-spacing: 0.03em;
+    line-height: 1.45;
   }
 
   .calc__field {
@@ -398,21 +438,25 @@ const toggles = [
     border-top: 1px solid rgba(247, 242, 234, 0.2);
   }
 
-  .calc__breakdown > div {
+  /* :global обязателен — строки сметы собираются в JS и не получают
+     scope-атрибут Astro, обычные селекторы по ним не сработают. */
+  .calc__breakdown :global(div) {
     display: flex;
+    align-items: baseline;
     justify-content: space-between;
     gap: 12px;
     font-size: 0.92rem;
   }
 
-  .calc__breakdown dt {
+  .calc__breakdown :global(dt) {
     color: rgba(247, 242, 234, 0.82);
   }
 
-  .calc__breakdown dd {
+  .calc__breakdown :global(dd) {
     margin: 0;
     font-family: var(--font-data);
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
 
   @media (min-width: 960px) {
