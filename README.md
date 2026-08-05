@@ -20,7 +20,7 @@
 | Типы | TypeScript strict |
 | Анимации | GSAP + ScrollTrigger, Lenis |
 | Интерактив | ванильный TS в `<script>` Astro (без React — экономим JS) |
-| Изображения | вектор (SVG/CSS), без фотостоков и чужих брендов |
+| Изображения | webp-фото + SVG-техкарта; без фотостоков и чужих брендов |
 | Лиды | `wa.me` без бэкенда |
 
 JS первой загрузки: ~62 KB gz (gsap + ScrollTrigger + lenis + логика). Бюджет — 180 KB.
@@ -83,12 +83,28 @@ base: '/',
 
 Для GitHub Pages остаётся `base: '/kitchen-template'`.
 
-### 3. Реальные фото
+### 3. Фотографии
 
-Демо-ассеты нарисованы вектором (`src/components/svg/`) — они ничего не весят и не
-содержат чужих брендов. Когда появятся фото клиента: положить в `public/assets/`,
-заменить `<KitchenRender>` в `Portfolio.astro` и `<KitchenSpec>` в `Hero.astro`
-на `<img srcset>` (AVIF + WebP fallback, hero — до 280 KB).
+В `public/assets/` лежат 21 демо-изображение (webp, ~980 КБ на всю страницу).
+Все сгенерированы одной серией, поэтому свет и палитра у них общие; брендов,
+логотипов и читаемого текста в кадрах нет.
+
+| Файл | Где используется |
+| --- | --- |
+| `hero-kitchen.webp` | первый экран, под техкартой |
+| `work-1…6.webp` | лента работ |
+| `mat-*.webp` | макро образцов материалов |
+| `cat-*.webp` | изометрия форматов, **PNG с альфой** → webp |
+| `quiz-sheet.webp` | боковая панель подбора |
+| `calc-measure.webp` | калькулятор |
+
+Чтобы подставить фото клиента — заменить файлы с теми же именами либо поправить
+поля `image` в `src/config/client.ts` (`portfolio[].image`, `materials[].image`,
+`categories[].image`). **Если поля `image` нет — рисуется векторный запасной
+вариант** (`KitchenRender`, `ShapePlan`), вёрстка не разъезжается.
+
+Требования к фото: hero — до 280 КБ, карточки — 800–1200 px по ширине,
+всё ниже первого экрана с `loading="lazy"`.
 
 Шот-лист для съёмки — раздел 6 в `description.md`.
 
@@ -112,7 +128,8 @@ src/
     quiz/Quiz.astro         механика 1: подбор + результат
     calculator/Calculator   механика 2: калькулятор + результат
     Motion.astro            единственный motion-модуль (Lenis + GSAP)
-    svg/                    векторные demo-ассеты
+    svg/SpecOverlay.astro   техкарта поверх фото в первом экране
+    svg/                    векторные запасные варианты
   pages/
     index.astro             лендинг + schema.org
     privacy.astro           политика конфиденциальности
