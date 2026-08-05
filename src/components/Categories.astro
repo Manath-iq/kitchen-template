@@ -23,7 +23,7 @@ const inside = ['Проект под ваши размеры', 'Подбор м�
       {items.map((item, i) => (
         <article class="cats__card paper ticks group" data-anim="rise" style={`--i:${i}`}>
           <div class="cats__head">
-            <span class="num cats__code">{item.code}</span>
+            <span class="num cats__code" aria-hidden="true">{item.code}</span>
             <span class="tag">{item.meta}</span>
           </div>
 
@@ -91,10 +91,12 @@ const inside = ['Проект под ваши размеры', 'Подбор м�
     gap: 12px;
   }
 
+  /* «Водяной» номер позиции — декоративный дубль порядка карточек,
+     поэтому скрыт от скринридера и не обязан добирать контраст. */
   .cats__code {
     font-size: 1.5rem;
     font-weight: 600;
-    color: rgba(75, 75, 75, 0.28);
+    color: rgba(75, 75, 75, 0.38);
     line-height: 1;
   }
 
@@ -135,7 +137,7 @@ const inside = ['Проект под ваши размеры', 'Подбор м�
 
   .cats__layer-num {
     font-size: 0.68rem;
-    color: #8d6f3c;
+    color: var(--color-brass-text);
   }
 
   .cats__inside {

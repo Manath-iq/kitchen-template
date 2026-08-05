@@ -51,7 +51,7 @@ const steps = [
           <span class="proc__dot" aria-hidden="true"></span>
           <div class="proc__body paper">
             <div class="proc__head">
-              <span class="num proc__num">{String(i + 1)}</span>
+              <span class="num proc__num" aria-hidden="true">{String(i + 1)}</span>
               <span class="tag">{step.code}</span>
             </div>
             <h3 class="h3 proc__title">{step.title}</h3>
@@ -136,10 +136,11 @@ const steps = [
     gap: 12px;
   }
 
+  /* Дубль номера шага: порядок уже задан <ol> и меткой Э-0N. */
   .proc__num {
     font-size: 1.6rem;
     font-weight: 600;
-    color: rgba(75, 75, 75, 0.3);
+    color: rgba(75, 75, 75, 0.4);
     line-height: 1;
   }
 
@@ -149,7 +150,7 @@ const steps = [
   }
 
   .proc__meta {
-    color: var(--color-green);
+    color: var(--color-green-text);
     letter-spacing: 0.1em;
   }
 

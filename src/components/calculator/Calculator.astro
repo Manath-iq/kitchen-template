@@ -200,7 +200,8 @@ const toggles = [
 
   .calc__range {
     width: 100%;
-    height: 28px;
+    /* 44px — минимальная зона касания, хотя сам трек тонкий */
+    height: 44px;
     appearance: none;
     background: transparent;
     cursor: pointer;
@@ -374,7 +375,7 @@ const toggles = [
   .calc__range-line,
   .calc__delta,
   .calc__note {
-    color: rgba(247, 242, 234, 0.7);
+    color: rgba(247, 242, 234, 0.82);
     text-transform: none;
     letter-spacing: 0.03em;
   }
@@ -405,7 +406,7 @@ const toggles = [
   }
 
   .calc__breakdown dt {
-    color: rgba(247, 242, 234, 0.7);
+    color: rgba(247, 242, 234, 0.82);
   }
 
   .calc__breakdown dd {

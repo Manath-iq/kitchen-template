@@ -33,7 +33,15 @@ const works = clientConfig.portfolio;
       </div>
     </div>
 
-    <div class="port__rail scroll-x no-scrollbar" data-port-rail data-goal="portfolio_view">
+    <!-- tabindex: карточки без ссылок внутри, иначе ленту не пролистать с клавиатуры -->
+    <div
+      class="port__rail scroll-x no-scrollbar"
+      data-port-rail
+      data-goal="portfolio_view"
+      tabindex="0"
+      role="group"
+      aria-label="Лента проектов, прокручивается стрелками"
+    >
       {works.map((work, i) => (
         <article class="port__card paper" data-anim="rise" style={`--i:${i}`}>
           <div class="port__media">
@@ -153,7 +161,7 @@ const works = clientConfig.portfolio;
   }
 
   .port__price {
-    color: #8d6f3c;
+    color: var(--color-brass-text);
     white-space: nowrap;
     font-size: 0.92rem;
   }
