@@ -1,0 +1,163 @@
+---
+import { clientConfig } from '../config/client';
+import { withBase } from '../lib/url';
+
+const c = clientConfig;
+const year = new Date().getFullYear();
+---
+
+<footer class="ftr">
+  <div class="container">
+    <div class="ftr__top">
+      <div class="ftr__brand">
+        <img src={withBase(c.brand.logoPath)} width="36" height="36" alt="" />
+        <div>
+          <p class="ftr__name">{c.companyName}</p>
+          <p class="tag">КУХНИ НА ЗАКАЗ · {c.city.toUpperCase()}</p>
+        </div>
+      </div>
+
+      <nav class="ftr__nav" aria-label="Подвал">
+        <a href="#services">Услуги</a>
+        <a href="#materials">Материалы</a>
+        <a href="#calculator">Калькулятор</a>
+        <a href="#portfolio">Работы</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+
+      <div class="ftr__contacts">
+        <a class="num ftr__phone" href={`tel:${c.phone.replace(/[^\d+]/g, '')}`} data-goal="phone_click">
+          {c.phone}
+        </a>
+        <p class="tag">{c.hours}</p>
+      </div>
+    </div>
+
+    <hr class="hair" />
+
+    <div class="ftr__legal">
+      <p>{c.legalName} · {c.legalForm}</p>
+      <p class="num">ИНН {c.inn} • ОГРНИП {c.ogrn} • {c.city}, {c.address}</p>
+      <nav class="ftr__docs" aria-label="Документы">
+        <a href={withBase('/privacy')}>Политика конфиденциальности</a>
+        <a href={withBase('/consent')}>Согласие на обработку персональных данных</a>
+      </nav>
+      <p class="ftr__disclaimer">{c.disclaimers.publicOffer} {c.disclaimers.priceNote}</p>
+      <p class="ftr__disclaimer">{c.disclaimers.techReg}</p>
+      {
+        c.demoMode && (
+          <p class="ftr__demo">
+            Демонстрационный шаблон. Название, реквизиты, адрес, телефон, цены и отзывы —
+            заглушки для показа механики. Изображения сгенерированы вектором и не содержат
+            чужих брендов.
+          </p>
+        )
+      }
+      <p class="tag ftr__copy">© {year} {c.companyName}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    padding-block: clamp(36px, 5vw, 64px) 40px;
+    border-top: 1px solid var(--line);
+    background: rgba(232, 236, 239, 0.4);
+  }
+
+  .ftr__top {
+    display: grid;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .ftr__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ftr__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  .ftr__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+  }
+
+  .ftr__nav a {
+    color: var(--color-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .ftr__nav a:hover {
+    color: var(--color-ink);
+  }
+
+  .ftr__contacts {
+    display: grid;
+    gap: 4px;
+  }
+
+  .ftr__phone {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .ftr__legal {
+    display: grid;
+    gap: 8px;
+    margin-top: 24px;
+    font-size: 0.86rem;
+    color: var(--color-muted);
+  }
+
+  .ftr__docs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    margin-top: 4px;
+  }
+
+  .ftr__docs a {
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-brass);
+    text-decoration: none;
+    padding-bottom: 2px;
+  }
+
+  .ftr__disclaimer {
+    font-size: 0.8rem;
+    max-width: 90ch;
+    opacity: 0.85;
+  }
+
+  .ftr__demo {
+    margin-top: 6px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px dashed rgba(165, 94, 71, 0.5);
+    background: rgba(165, 94, 71, 0.07);
+    color: var(--color-rust);
+    font-size: 0.8rem;
+    max-width: 90ch;
+  }
+
+  .ftr__copy {
+    margin-top: 8px;
+  }
+
+  @media (min-width: 900px) {
+    .ftr__top {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto;
+      align-items: center;
+    }
+  }
+</style>

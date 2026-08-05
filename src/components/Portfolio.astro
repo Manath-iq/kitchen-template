@@ -1,0 +1,203 @@
+---
+import { clientConfig } from '../config/client';
+import { formatDays } from '../lib/format';
+import SheetHead from './ui/SheetHead.astro';
+import KitchenRender from './svg/KitchenRender.astro';
+
+const works = clientConfig.portfolio;
+---
+
+<section class="section" id="portfolio">
+  <div class="container">
+    <SheetHead sheet="ЛИСТ 07" label="РАБОТЫ" index="07 / 11" />
+
+    <div class="port__intro">
+      <div>
+        <h2 class="h2" data-anim="rise">Реальные проекты</h2>
+        <p class="lead" data-anim="fade">
+          Разные планировки и бюджеты. Под каждым проектом — площадь, срок и состав, чтобы
+          можно было сравнить со своей задачей.
+        </p>
+      </div>
+      <div class="port__nav">
+        <button type="button" class="port__arrow" data-port-prev aria-label="Предыдущий проект">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M14 8H3M7 4 3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button type="button" class="port__arrow" data-port-next aria-label="Следующий проект">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="port__rail scroll-x no-scrollbar" data-port-rail data-goal="portfolio_view">
+      {works.map((work, i) => (
+        <article class="port__card paper" data-anim="rise" style={`--i:${i}`}>
+          <div class="port__media">
+            <KitchenRender tone={work.tone} id={work.id} />
+            <span class="tag port__badge">{work.shape.toUpperCase()} / {work.meters.toUpperCase()}</span>
+          </div>
+          <div class="port__body">
+            <h3 class="h3 port__title">{work.title}</h3>
+            <dl class="port__meta">
+              <div><dt class="tag">ПЛОЩАДЬ</dt><dd class="num">{work.meters}</dd></div>
+              <div><dt class="tag">СРОК</dt><dd class="num">{formatDays(work.days, work.days)}</dd></div>
+              <div><dt class="tag">БЮДЖЕТ</dt><dd class="num port__price">{work.price}</dd></div>
+            </dl>
+            <p class="port__materials">{work.materials}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="port__foot">
+      <a class="btn btn-ghost" href="#quiz">Показать похожий вариант</a>
+      <p class="tag port__foot-note">
+        Изображения — демонстрационные, без брендов. Реальные фото подставляются в конфиг клиента.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .port__intro {
+    display: grid;
+    gap: 20px;
+    margin-bottom: clamp(24px, 3vw, 36px);
+  }
+
+  .port__intro > div:first-child {
+    display: grid;
+    gap: 14px;
+    max-width: 62ch;
+  }
+
+  .port__nav {
+    display: flex;
+    gap: 8px;
+  }
+
+  .port__arrow {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--color-ink);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: border-color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
+  }
+
+  .port__arrow:hover {
+    border-color: var(--color-brass);
+    background: rgba(195, 162, 106, 0.12);
+  }
+
+  .port__rail {
+    margin-inline: calc(clamp(16px, 4vw, 48px) * -1);
+    padding-inline: clamp(16px, 4vw, 48px);
+  }
+
+  .port__card {
+    width: min(86vw, 380px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .port__media {
+    position: relative;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .port__badge {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: rgba(247, 242, 234, 0.9);
+    font-size: 0.68rem;
+  }
+
+  .port__body {
+    padding: 18px 20px 20px;
+    display: grid;
+    gap: 12px;
+    flex: 1;
+    align-content: start;
+  }
+
+  .port__title {
+    font-size: 1.2rem;
+  }
+
+  .port__meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+    padding-block: 12px;
+    border-block: 1px dashed var(--line);
+  }
+
+  .port__meta dd {
+    margin: 2px 0 0;
+    font-weight: 600;
+    font-size: 0.98rem;
+  }
+
+  .port__price {
+    color: #8d6f3c;
+    white-space: nowrap;
+    font-size: 0.92rem;
+  }
+
+  .port__materials {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+
+  .port__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .port__foot-note {
+    text-transform: none;
+    letter-spacing: 0.03em;
+    max-width: 52ch;
+    opacity: 0.8;
+  }
+
+  @media (min-width: 900px) {
+    .port__intro {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+    }
+  }
+</style>
+
+<script>
+  const rail = document.querySelector<HTMLElement>('[data-port-rail]');
+  if (rail) {
+    const step = () => {
+      const card = rail.querySelector<HTMLElement>('.port__card');
+      return (card?.offsetWidth ?? 320) + 16;
+    };
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const scrollBy = (dir: number) =>
+      rail.scrollBy({ left: dir * step(), behavior: reduced ? 'auto' : 'smooth' });
+
+    document.querySelector('[data-port-prev]')?.addEventListener('click', () => scrollBy(-1));
+    document.querySelector('[data-port-next]')?.addEventListener('click', () => scrollBy(1));
+  }
+</script>

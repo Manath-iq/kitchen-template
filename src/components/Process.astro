@@ -1,0 +1,175 @@
+---
+import { clientConfig } from '../config/client';
+import SheetHead from './ui/SheetHead.astro';
+
+const c = clientConfig;
+
+const steps = [
+  {
+    code: 'Э-01',
+    title: 'Заявка или WhatsApp',
+    text: 'Вы проходите подбор или считаете в калькуляторе. Мы получаем параметры и не задаём заново те же вопросы.',
+    meta: `Ответ в течение рабочего дня`,
+  },
+  {
+    code: 'Э-02',
+    title: 'Замер и уточнение размеров',
+    text: 'Замерщик снимает геометрию, выносы коммуникаций, перепады стен и пола. Если на замере всплывает риск по размерам, он виден сразу.',
+    meta: `Выезд до ${c.trust.measureHours} часов`,
+  },
+  {
+    code: 'Э-03',
+    title: '3D-проект и смета',
+    text: 'Показываем проект, состав фурнитуры и итоговую смету. Сроки и состав фиксируются до запуска.',
+    meta: 'Правки до подписания договора',
+  },
+  {
+    code: 'Э-04',
+    title: 'Производство, доставка, монтаж',
+    text: 'Раскрой, кромка, присадка, сборка. Монтаж отдельным этапом с проверкой по листу замера.',
+    meta: `Монтаж ${c.trust.installDays} дня`,
+  },
+];
+---
+
+<section class="section" id="process">
+  <div class="container">
+    <SheetHead sheet="ЛИСТ 03" label="ТЕХНОЛОГИЯ" index="03 / 11" />
+
+    <div class="proc__intro">
+      <h2 class="h2" data-anim="rise">Как проходит работа</h2>
+      <p class="lead" data-anim="fade">
+        Четыре этапа. На каждом видно, что уже зафиксировано, а что ещё может измениться.
+      </p>
+    </div>
+
+    <ol class="proc" data-proc>
+      <span class="proc__rail" aria-hidden="true"><span class="proc__rail-fill" data-proc-fill></span></span>
+
+      {steps.map((step, i) => (
+        <li class="proc__item" data-anim="rise" style={`--i:${i}`}>
+          <span class="proc__dot" aria-hidden="true"></span>
+          <div class="proc__body paper">
+            <div class="proc__head">
+              <span class="num proc__num">{String(i + 1)}</span>
+              <span class="tag">{step.code}</span>
+            </div>
+            <h3 class="h3 proc__title">{step.title}</h3>
+            <p class="proc__text">{step.text}</p>
+            <p class="tag proc__meta">{step.meta}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <div class="proc__cta">
+      <a class="btn btn-primary" href="#quiz" data-goal="quiz_start">Показать мой вариант</a>
+      <p class="tag proc__cta-note">5 вопросов · 30 секунд · без звонка</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .proc__intro {
+    display: grid;
+    gap: 14px;
+    margin-bottom: clamp(28px, 4vw, 44px);
+    max-width: 62ch;
+  }
+
+  .proc {
+    position: relative;
+    list-style: none;
+    padding: 0 0 0 34px;
+    margin: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .proc__rail {
+    position: absolute;
+    left: 11px;
+    top: 12px;
+    bottom: 12px;
+    width: 1px;
+    background: var(--line);
+  }
+
+  .proc__rail-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 1px;
+    height: var(--fill, 0%);
+    background: var(--color-brass);
+    transition: height 0.2s linear;
+  }
+
+  .proc__item {
+    position: relative;
+  }
+
+  .proc__dot {
+    position: absolute;
+    left: -29px;
+    top: 26px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--color-paper);
+    border: 1px solid var(--line-strong);
+  }
+
+  .proc__item[data-on='true'] .proc__dot {
+    border-color: var(--color-brass);
+    background: var(--color-brass);
+  }
+
+  .proc__body {
+    padding: 20px 22px;
+    display: grid;
+    gap: 8px;
+  }
+
+  .proc__head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .proc__num {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: rgba(75, 75, 75, 0.3);
+    line-height: 1;
+  }
+
+  .proc__text {
+    color: var(--color-muted);
+    max-width: 68ch;
+  }
+
+  .proc__meta {
+    color: var(--color-green);
+    letter-spacing: 0.1em;
+  }
+
+  .proc__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .proc__cta-note {
+    text-transform: none;
+    letter-spacing: 0.04em;
+  }
+
+  @media (min-width: 900px) {
+    .proc {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px 20px;
+    }
+  }
+</style>

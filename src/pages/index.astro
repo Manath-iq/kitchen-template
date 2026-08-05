@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Trust from '../components/Trust.astro';
+import Categories from '../components/Categories.astro';
+import Process from '../components/Process.astro';
+import Quiz from '../components/quiz/Quiz.astro';
+import Calculator from '../components/calculator/Calculator.astro';
+import Materials from '../components/Materials.astro';
+import Portfolio from '../components/Portfolio.astro';
+import Location from '../components/Location.astro';
+import Reviews from '../components/Reviews.astro';
+import Pricing from '../components/Pricing.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
+import Motion from '../components/Motion.astro';
+import { clientConfig, fill, heroTitle } from '../config/client';
+
+const c = clientConfig;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: c.faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: fill(item.a) },
+  })),
+};
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: `Кухня на заказ в ${c.cityPrepositional}`,
+  description:
+    'Кухонный гарнитур на заказ: замер, 3D-проект, производство, доставка и монтаж. Комплектация и смета фиксируются до запуска работ.',
+  brand: { '@type': 'Brand', name: c.companyName },
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'RUB',
+    lowPrice: c.pricing.price24m,
+    highPrice: c.pricing.price4m * 2,
+    offerCount: 3,
+    availability: 'https://schema.org/InStock',
+  },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Главная', item: '#top' },
+    { '@type': 'ListItem', position: 2, name: 'Калькулятор', item: '#calculator' },
+    { '@type': 'ListItem', position: 3, name: 'Контакты', item: '#contacts' },
+  ],
+};
+---
+
+<Base
+  title={`${c.companyName} — кухни на заказ в ${c.cityPrepositional}: цена, срок и состав до замера`}
+  description={`${heroTitle} Замер до ${c.trust.measureHours} часов, гарантия ${c.warranty}. Расчёт стоимости за 30 секунд без звонка.`}
+  schema={[faqSchema, productSchema, breadcrumbSchema]}
+>
+  <Header />
+  <main id="main">
+    <Hero />
+    <Trust />
+    <Categories />
+    <Process />
+    <Quiz />
+    <Calculator />
+    <Materials />
+    <Portfolio />
+    <Location />
+    <Reviews />
+    <Pricing />
+    <Faq />
+    <FinalCta />
+  </main>
+  <Footer />
+  <MobileBar />
+  <Motion />
+</Base>

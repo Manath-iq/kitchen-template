@@ -1,0 +1,253 @@
+---
+import { clientConfig } from '../config/client';
+import { withBase } from '../lib/url';
+
+const c = clientConfig;
+const nav = [
+  { href: '#services', label: 'Услуги' },
+  { href: '#materials', label: 'Материалы' },
+  { href: '#calculator', label: 'Калькулятор' },
+  { href: '#contacts', label: 'Контакты' },
+];
+---
+
+<header class="hdr" id="header" data-header>
+  <div class="container hdr__inner">
+    <a class="hdr__brand" href="#top" aria-label={`${c.companyName} — на главную`}>
+      <img src={withBase(c.brand.logoPath)} width="40" height="40" alt="" class="hdr__logo" />
+      <span class="hdr__name">
+        <span class="hdr__title">{c.companyName}</span>
+        <span class="tag hdr__sub">КУХНИ НА ЗАКАЗ · {c.city.toUpperCase()}</span>
+      </span>
+    </a>
+
+    <nav class="hdr__nav" aria-label="Основная навигация">
+      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+
+    <div class="hdr__actions">
+      <a class="hdr__phone num" href={`tel:${c.phone.replace(/[^\d+]/g, '')}`} data-goal="phone_click">
+        {c.phone}
+      </a>
+      <a class="btn btn-primary btn-sm" href="#quiz" data-goal="hero_cta_click">Рассчитать кухню</a>
+    </div>
+
+    <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="mobile-menu" data-burger>
+      <span class="visually-hidden">Меню</span>
+      <span class="hdr__burger-line" aria-hidden="true"></span>
+      <span class="hdr__burger-line" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <div class="hdr__hair" aria-hidden="true"></div>
+
+  <div class="hdr__mobile" id="mobile-menu" hidden data-mobile-menu>
+    <div class="container hdr__mobile-inner">
+      {nav.map((item) => <a href={item.href} class="hdr__mobile-link">{item.label}</a>)}
+      <a class="hdr__mobile-link num" href={`tel:${c.phone.replace(/[^\d+]/g, '')}`} data-goal="phone_click">
+        {c.phone}
+      </a>
+      <span class="tag">{c.hours}</span>
+    </div>
+  </div>
+</header>
+
+<style>
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: color-mix(in srgb, var(--color-paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    transition: padding 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
+    padding-block: 14px;
+  }
+
+  :global(.hdr-compact) .hdr {
+    padding-block: 6px;
+    background: color-mix(in srgb, var(--color-paper) 96%, transparent);
+    box-shadow: 0 10px 30px -28px rgba(75, 75, 75, 0.9);
+  }
+
+  .hdr__inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .hdr__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    margin-right: auto;
+  }
+
+  .hdr__logo {
+    width: 40px;
+    height: 40px;
+    transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out);
+  }
+
+  :global(.hdr-compact) .hdr__logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hdr__name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .hdr__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hdr__sub {
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+  }
+
+  :global(.hdr-compact) .hdr__sub {
+    display: none;
+  }
+
+  .hdr__nav {
+    display: none;
+    gap: 26px;
+  }
+
+  .hdr__nav a {
+    color: var(--color-ink);
+    text-decoration: none;
+    font-size: 0.95rem;
+    padding-block: 4px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s var(--ease-out);
+  }
+
+  .hdr__nav a:hover {
+    border-color: var(--color-brass);
+  }
+
+  .hdr__actions {
+    display: none;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hdr__phone {
+    color: var(--color-ink);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .hdr__phone:hover {
+    color: #8d6f3c;
+  }
+
+  .hdr__burger {
+    display: grid;
+    place-content: center;
+    gap: 6px;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .hdr__burger-line {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--color-ink);
+    transition: transform 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
+  }
+
+  .hdr__burger[aria-expanded='true'] .hdr__burger-line:first-child {
+    transform: translateY(3.75px) rotate(45deg);
+  }
+
+  .hdr__burger[aria-expanded='true'] .hdr__burger-line:last-child {
+    transform: translateY(-3.75px) rotate(-45deg);
+  }
+
+  .hdr__hair {
+    height: 1px;
+    margin-top: 14px;
+    background: var(--line);
+  }
+
+  .hdr__mobile {
+    border-bottom: 1px solid var(--line);
+    background: var(--color-paper-2);
+  }
+
+  .hdr__mobile-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-block: 12px 20px;
+  }
+
+  .hdr__mobile-link {
+    padding-block: 12px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    color: var(--color-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    font-size: 1.05rem;
+  }
+
+  @media (min-width: 900px) {
+    .hdr__nav,
+    .hdr__actions {
+      display: flex;
+    }
+    .hdr__burger {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+  const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+
+  burger?.addEventListener('click', () => {
+    const open = burger.getAttribute('aria-expanded') === 'true';
+    burger.setAttribute('aria-expanded', String(!open));
+    if (menu) menu.hidden = open;
+  });
+
+  menu?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).tagName === 'A') {
+      burger?.setAttribute('aria-expanded', 'false');
+      menu.hidden = true;
+    }
+  });
+
+  // Компактная шапка после первого экрана
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      document.documentElement.classList.toggle('hdr-compact', window.scrollY > 80);
+      ticking = false;
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>

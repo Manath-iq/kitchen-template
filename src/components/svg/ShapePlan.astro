@@ -1,0 +1,78 @@
+---
+/** План-схема кухни сверху. Используется в категориях, квизе и калькуляторе. */
+interface Props {
+  shape: 'straight' | 'corner' | 'uShape' | 'island' | 'newbuild' | 'house';
+  class?: string;
+}
+const { shape, class: className = '' } = Astro.props;
+
+const runs: Record<Props['shape'], string[]> = {
+  straight: ['M18 62 H102 V76 H18 Z'],
+  corner: ['M18 62 H102 V76 H18 Z', 'M18 22 H32 V62 H18 Z'],
+  uShape: ['M18 62 H102 V76 H18 Z', 'M18 22 H32 V62 H18 Z', 'M88 22 H102 V62 H88 Z'],
+  island: ['M18 62 H102 V76 H18 Z', 'M44 30 H76 V44 H44 Z'],
+  newbuild: ['M18 62 H102 V76 H18 Z', 'M18 22 H32 V62 H18 Z'],
+  house: ['M18 62 H102 V76 H18 Z', 'M88 30 H102 V62 H88 Z'],
+};
+
+const paths = runs[shape];
+---
+
+<svg
+  class={`plan ${className}`}
+  viewBox="0 0 120 90"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <rect x="10" y="14" width="100" height="70" rx="4" stroke="#4B4B4B" stroke-opacity="0.35" />
+  <line x1="10" y1="84" x2="110" y2="84" stroke="#4B4B4B" stroke-opacity="0.5" stroke-width="1.5" />
+  {
+    shape === 'newbuild' && (
+      <g stroke="#A55E47" stroke-opacity="0.7" stroke-dasharray="3 3">
+        <line x1="60" y1="14" x2="60" y2="62" />
+        <line x1="42" y1="30" x2="78" y2="30" />
+      </g>
+    )
+  }
+  {
+    shape === 'house' && (
+      <path d="M10 14 L60 4 L110 14" stroke="#4B4B4B" stroke-opacity="0.35" />
+    )
+  }
+  {
+    paths.map((d) => (
+      <path
+        d={d}
+        class="plan__run"
+        fill="#D9C7AE"
+        fill-opacity="0.85"
+        stroke="#8A7657"
+        stroke-opacity="0.6"
+      />
+    ))
+  }
+  <line
+    x1="18"
+    y1="82"
+    x2="102"
+    y2="82"
+    stroke="#C3A26A"
+    stroke-width="1.5"
+    class="plan__dim"
+  />
+</svg>
+
+<style>
+  .plan {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .plan__run {
+    transition: fill-opacity 0.25s ease;
+  }
+  :global(.group:hover) .plan__run {
+    fill-opacity: 1;
+  }
+</style>

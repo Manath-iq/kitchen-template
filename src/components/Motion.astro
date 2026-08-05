@@ -1,0 +1,173 @@
+---
+/**
+ * Единственный motion-модуль страницы: Lenis + GSAP/ScrollTrigger.
+ * При prefers-reduced-motion скрипт не грузит анимации вообще.
+ */
+---
+
+<script>
+  import { bindGoals } from '../lib/metrika';
+
+  bindGoals();
+
+  const root = document.documentElement;
+  // ?nomotion — отладочный выключатель: страница ведёт себя как при
+  // prefers-reduced-motion. Удобно для проверки вёрстки и доступности.
+  const reduced =
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    new URLSearchParams(window.location.search).has('nomotion');
+
+  if (reduced) {
+    root.classList.remove('is-motion');
+    root.classList.add('no-motion', 'is-ready');
+  } else {
+    void (async () => {
+      const [{ gsap }, { ScrollTrigger }, { default: Lenis }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+        import('lenis'),
+      ]);
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      /* ---------- Плавный скролл ---------- */
+      // syncTouch выключен: на мобильном Safari нативная инерция стабильнее.
+      const lenis = new Lenis({ duration: 1.05, smoothWheel: true, syncTouch: false });
+      if (import.meta.env.DEV) Object.assign(window, { lenis });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+
+      // Якорные ссылки — через Lenis, с учётом высоты шапки
+      document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const id = link.getAttribute('href');
+          if (!id || id === '#') return;
+          const target = document.querySelector(id);
+          if (!target) return;
+          event.preventDefault();
+          lenis.scrollTo(target as HTMLElement, { offset: -84 });
+        });
+      });
+
+      root.classList.add('is-ready');
+
+      /* ---------- Появление блоков ---------- */
+      const groups = new Map<Element, HTMLElement[]>();
+      document.querySelectorAll<HTMLElement>('[data-anim]').forEach((el) => {
+        const parent = el.closest('section, footer') ?? document.body;
+        const list = groups.get(parent) ?? [];
+        list.push(el);
+        groups.set(parent, list);
+      });
+
+      groups.forEach((items, parent) => {
+        gsap.fromTo(
+          items,
+          { opacity: 0, y: 26 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            stagger: 0.07,
+            scrollTrigger: { trigger: parent, start: 'top 82%', once: true },
+          },
+        );
+      });
+
+      /* ---------- Сигнатурный момент: сборка спецификации ---------- */
+      const spec = document.querySelector<HTMLElement>('[data-spec]');
+      const hero = document.querySelector<HTMLElement>('[data-hero]');
+
+      if (spec && hero) {
+        const layer = (name: string) => spec.querySelector(`.ks-layer[data-layer="${name}"]`);
+        const legend = (n: number) => spec.querySelector(`[data-legend="${n}"]`);
+        const summary = spec.querySelector<HTMLElement>('[data-summary]');
+        const waLabel = spec.querySelector<HTMLElement>('[data-wa-label]');
+        const waLabelText = waLabel?.textContent ?? '';
+
+        // matchMedia сам пересобирает сценарий при смене брейкпоинта и откатывает стили.
+        // Пин — только на десктопе с мышью: на тач-устройствах pin + 100svh ломается
+        // первым делом (мобильный Safari, старый Android).
+        gsap.matchMedia().add(
+          {
+            pinned: '(min-width: 1024px) and (pointer: fine)',
+            plain: '(max-width: 1023px), (pointer: coarse)',
+          },
+          (context) => {
+            const pinned = Boolean(context.conditions?.pinned);
+
+            const build = gsap.timeline({
+              defaults: { ease: 'power2.out' },
+              scrollTrigger: pinned
+                ? {
+                    trigger: hero,
+                    // 92px — высота залипшей шапки: пин не должен уезжать под неё
+                    start: 'top 92px',
+                    end: '+=85%',
+                    scrub: 0.55,
+                    pin: true,
+                    pinSpacing: true,
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true,
+                  }
+                : { trigger: spec, start: 'top 80%', once: true },
+            });
+
+            const step = (name: string, index: number, from: gsap.TweenVars) => {
+              build.fromTo(
+                layer(name),
+                { opacity: from.opacity ?? 0, ...from },
+                { opacity: 1, x: 0, y: 0, scaleY: 1, duration: 0.5 },
+              );
+              const item = legend(index);
+              if (item) build.set(item, { attr: { 'data-on': 'true' } }, '<');
+            };
+
+            step('carcass', 1, { opacity: 0.18, y: 10 });
+            step('uppers', 2, { y: -18 });
+            step('facades', 3, { x: 26 });
+            step('hardware', 4, { scaleY: 0.9, transformOrigin: 'center' });
+            step('top', 5, { y: -14 });
+
+            build.fromTo(layer('callouts'), { opacity: 0 }, { opacity: 1, duration: 0.4 });
+
+            if (summary) {
+              build.fromTo(summary, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45 });
+              // Кнопка WhatsApp «оживает» в конце сборки — с конкретным оффером.
+              build.call(() => {
+                if (waLabel) waLabel.textContent = 'Забрать смету в WhatsApp';
+              });
+            }
+
+            return () => {
+              if (waLabel) waLabel.textContent = waLabelText;
+              spec.querySelectorAll('[data-legend]').forEach((el) => el.removeAttribute('data-on'));
+            };
+          },
+        );
+      }
+
+      /* ---------- Таймлайн процесса ---------- */
+      const proc = document.querySelector<HTMLElement>('[data-proc]');
+      const fill = document.querySelector<HTMLElement>('[data-proc-fill]');
+
+      if (proc && fill) {
+        const items = Array.from(proc.querySelectorAll<HTMLElement>('.proc__item'));
+        ScrollTrigger.create({
+          trigger: proc,
+          start: 'top 72%',
+          end: 'bottom 65%',
+          onUpdate: (self) => {
+            fill.style.setProperty('--fill', `${Math.round(self.progress * 100)}%`);
+            const active = Math.ceil(self.progress * items.length);
+            items.forEach((item, i) => item.setAttribute('data-on', String(i < active)));
+          },
+        });
+      }
+
+      ScrollTrigger.refresh();
+    })();
+  }
+</script>

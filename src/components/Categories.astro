@@ -1,0 +1,199 @@
+---
+import { clientConfig } from '../config/client';
+import SheetHead from './ui/SheetHead.astro';
+import ShapePlan from './svg/ShapePlan.astro';
+
+const items = clientConfig.categories;
+const inside = ['Проект под ваши размеры', 'Подбор материалов', 'Смета до запуска'];
+---
+
+<section class="section" id="services">
+  <div class="container">
+    <SheetHead sheet="ЛИСТ 02" label="ФОРМАТЫ" index="02 / 11" />
+
+    <div class="cats__intro">
+      <h2 class="h2" data-anim="rise">Выберите свой формат кухни</h2>
+      <p class="lead" data-anim="fade">
+        Формат задаёт коэффициент в смете: чем больше углов и фронтов, тем больше корпусов,
+        кромки и присадки. Мы показываем это до замера, а не после.
+      </p>
+    </div>
+
+    <div class="cats">
+      {items.map((item, i) => (
+        <article class="cats__card paper ticks group" data-anim="rise" style={`--i:${i}`}>
+          <div class="cats__head">
+            <span class="num cats__code">{item.code}</span>
+            <span class="tag">{item.meta}</span>
+          </div>
+
+          <div class="cats__plan">
+            <ShapePlan shape={item.id} />
+          </div>
+
+          <h3 class="h3 cats__title">{item.title}</h3>
+
+          <ul class="cats__layers">
+            {item.layers.map((layer, li) => (
+              <li>
+                <span class="num cats__layer-num">{String(li + 1).padStart(2, '0')}</span>
+                {layer}
+              </li>
+            ))}
+          </ul>
+
+          <ul class="cats__inside">
+            {inside.map((line) => <li>{line}</li>)}
+          </ul>
+
+          <a class="link-brass cats__cta" href="#quiz">
+            Выбрать формат
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cats__intro {
+    display: grid;
+    gap: 16px;
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+
+  .cats {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  }
+
+  .cats__card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 22px;
+    transition: transform 0.35s var(--ease-out), border-color 0.35s var(--ease-out);
+  }
+
+  .cats__card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(195, 162, 106, 0.6);
+  }
+
+  .cats__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .cats__code {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgba(75, 75, 75, 0.28);
+    line-height: 1;
+  }
+
+  .cats__plan {
+    max-width: 172px;
+  }
+
+  .cats__title {
+    margin-top: 2px;
+  }
+
+  .cats__layers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--color-muted);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s var(--ease-out), opacity 0.3s var(--ease-out);
+  }
+
+  .cats__card:hover .cats__layers,
+  .cats__card:focus-within .cats__layers {
+    max-height: 90px;
+    opacity: 1;
+  }
+
+  .cats__layers li {
+    display: inline-flex;
+    gap: 5px;
+    align-items: baseline;
+  }
+
+  .cats__layer-num {
+    font-size: 0.68rem;
+    color: #8d6f3c;
+  }
+
+  .cats__inside {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 auto;
+    display: grid;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+
+  .cats__inside li {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .cats__inside li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-green);
+    flex: none;
+    translate: 0 -2px;
+  }
+
+  .cats__cta {
+    margin-top: 12px;
+    align-self: flex-start;
+    font-size: 0.92rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cats__layers {
+      max-height: 90px;
+      opacity: 1;
+    }
+  }
+
+  @media (hover: none) {
+    .cats__layers {
+      max-height: 90px;
+      opacity: 1;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    /* ровная сетка 3×2 — шесть форматов читаются как одна таблица */
+    .cats {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .cats__intro {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: end;
+      gap: 40px;
+    }
+  }
+</style>

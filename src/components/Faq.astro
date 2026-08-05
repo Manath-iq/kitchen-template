@@ -1,0 +1,139 @@
+---
+import { clientConfig, fill } from '../config/client';
+import SheetHead from './ui/SheetHead.astro';
+
+const items = clientConfig.faq.map((item) => ({ q: item.q, a: fill(item.a) }));
+---
+
+<section class="section" id="faq">
+  <div class="container">
+    <SheetHead sheet="ЛИСТ 11" label="ВОПРОСЫ" index="11 / 11" />
+
+    <div class="faq__grid">
+      <div class="faq__intro">
+        <h2 class="h2" data-anim="rise">Частые вопросы</h2>
+        <p class="lead" data-anim="fade">
+          Здесь ответы на то, что обычно выясняют по телефону. Если вопрос остался — напишите,
+          ответим текстом, без звонка.
+        </p>
+        <a class="btn btn-ghost" href={`tel:${clientConfig.phone.replace(/[^\d+]/g, '')}`} data-goal="phone_click">
+          Задать свой вопрос
+        </a>
+      </div>
+
+      <div class="faq__list">
+        {items.map((item, i) => (
+          <details class="faq__item paper" data-goal="faq_open" name="faq">
+            <summary class="faq__q">
+              <span class="num faq__num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="faq__q-text">{item.q}</span>
+              <span class="faq__icon" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq__a"><p>{item.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__grid {
+    display: grid;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .faq__intro {
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+    max-width: 52ch;
+  }
+
+  .faq__list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .faq__item {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .faq__q {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    min-height: 60px;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 500;
+    font-size: 1.02rem;
+  }
+
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__num {
+    font-size: 0.74rem;
+    color: #8d6f3c;
+    letter-spacing: 0.1em;
+  }
+
+  .faq__q-text {
+    flex: 1;
+  }
+
+  .faq__icon {
+    width: 30px;
+    height: 30px;
+    flex: none;
+    border-radius: 9px;
+    border: 1px solid var(--line-strong);
+    display: grid;
+    place-items: center;
+    color: var(--color-ink);
+    transition: rotate 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
+  }
+
+  .faq__item[open] .faq__icon {
+    rotate: 45deg;
+    border-color: var(--color-brass);
+    color: #8d6f3c;
+  }
+
+  .faq__a {
+    padding: 0 20px 20px 58px;
+    color: var(--color-muted);
+    max-width: 78ch;
+  }
+
+  .faq__item[open] .faq__a {
+    animation: faq-in 0.32s var(--ease-out);
+  }
+
+  @keyframes faq-in {
+    from {
+      opacity: 0;
+      translate: 0 -6px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .faq__grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+      gap: 48px;
+    }
+  }
+</style>

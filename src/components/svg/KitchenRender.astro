@@ -1,0 +1,140 @@
+---
+/**
+ * Demo-asset: условный кадр кухни без брендов, логотипов и текста.
+ * Отрисован вектором, поэтому весит десятки байт и не тянет за собой фото.
+ */
+interface Props {
+  tone: string;
+  id: string;
+  class?: string;
+}
+const { tone, id, class: className = '' } = Astro.props;
+
+const palettes: Record<string, { wall: string; wall2: string; facade: string; facade2: string; top: string; floor: string; accent: string }> = {
+  sand:     { wall: '#F1EADD', wall2: '#E4DACA', facade: '#DFCCAF', facade2: '#CDB693', top: '#4A4A48', floor: '#C9B79C', accent: '#C3A26A' },
+  grey:     { wall: '#EDF0F2', wall2: '#DDE3E7', facade: '#DADFE2', facade2: '#C3CBD0', top: '#3F3F41', floor: '#C4C0B8', accent: '#8FA0AB' },
+  green:    { wall: '#EEF0E9', wall2: '#DFE3D8', facade: '#9FAE9B', facade2: '#7C8F7A', top: '#3B3B39', floor: '#CBBCA2', accent: '#7C8F7A' },
+  graphite: { wall: '#E9E6E1', wall2: '#D8D4CD', facade: '#6E6C68', facade2: '#55534F', top: '#2F2E2C', floor: '#BFB4A2', accent: '#C3A26A' },
+};
+
+const p = palettes[tone] ?? palettes.sand!;
+const uid = `kr-${id}`;
+---
+
+<svg
+  class={`krender ${className}`}
+  viewBox="0 0 480 320"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Условное изображение готовой кухни"
+>
+  <defs>
+    <linearGradient id={`${uid}-wall`} x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color={p.wall} />
+      <stop offset="1" stop-color={p.wall2} />
+    </linearGradient>
+    <linearGradient id={`${uid}-fac`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color={p.facade} />
+      <stop offset="1" stop-color={p.facade2} />
+    </linearGradient>
+    <linearGradient id={`${uid}-light`} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.5" />
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+    <clipPath id={`${uid}-clip`}>
+      <rect width="480" height="320" rx="0" />
+    </clipPath>
+  </defs>
+
+  <g clip-path={`url(#${uid}-clip)`}>
+    <rect width="480" height="320" fill={`url(#${uid}-wall)`} />
+
+    <!-- дневной свет из окна слева -->
+    <path d="M0 0 L210 0 L120 320 L0 320 Z" fill={`url(#${uid}-light)`} />
+
+    <!-- пол -->
+    <path d="M0 262 H480 V320 H0 Z" fill={p.floor} />
+    <g stroke="#4B4B4B" stroke-opacity="0.12">
+      <line x1="0" y1="278" x2="480" y2="278" />
+      <line x1="0" y1="296" x2="480" y2="296" />
+      <line x1="80" y1="262" x2="52" y2="320" />
+      <line x1="190" y1="262" x2="176" y2="320" />
+      <line x1="300" y1="262" x2="304" y2="320" />
+      <line x1="410" y1="262" x2="430" y2="320" />
+    </g>
+
+    <!-- фартук -->
+    <rect x="0" y="150" width="480" height="26" fill="#FFFFFF" fill-opacity="0.45" />
+    <g stroke="#4B4B4B" stroke-opacity="0.08">
+      <line x1="0" y1="163" x2="480" y2="163" />
+      <line x1="60" y1="150" x2="60" y2="176" />
+      <line x1="140" y1="150" x2="140" y2="176" />
+      <line x1="220" y1="150" x2="220" y2="176" />
+      <line x1="300" y1="150" x2="300" y2="176" />
+      <line x1="380" y1="150" x2="380" y2="176" />
+      <line x1="440" y1="150" x2="440" y2="176" />
+    </g>
+
+    <!-- верхние модули -->
+    <rect x="24" y="44" width="176" height="104" rx="3" fill={`url(#${uid}-fac)`} />
+    <rect x="316" y="44" width="140" height="104" rx="3" fill={`url(#${uid}-fac)`} />
+    <g stroke="#000000" stroke-opacity="0.12">
+      <rect x="24" y="44" width="176" height="104" rx="3" />
+      <rect x="316" y="44" width="140" height="104" rx="3" />
+      <line x1="112" y1="44" x2="112" y2="148" />
+      <line x1="386" y1="44" x2="386" y2="148" />
+    </g>
+
+    <!-- вытяжка -->
+    <path d="M228 148 V96 h60 v52" fill={p.facade2} fill-opacity="0.55" />
+    <path d="M240 96 l10 -30 h16 l10 30" fill={p.facade} fill-opacity="0.8" />
+
+    <!-- столешница -->
+    <rect x="0" y="176" width="480" height="14" fill={p.top} />
+    <rect x="0" y="176" width="480" height="3" fill="#FFFFFF" fill-opacity="0.22" />
+
+    <!-- нижние модули -->
+    <rect x="8" y="190" width="464" height="66" fill={`url(#${uid}-fac)`} />
+    <g stroke="#000000" stroke-opacity="0.14">
+      <line x1="116" y1="190" x2="116" y2="256" />
+      <line x1="228" y1="190" x2="228" y2="256" />
+      <line x1="340" y1="190" x2="340" y2="256" />
+      <line x1="8" y1="216" x2="472" y2="216" />
+    </g>
+    <rect x="8" y="256" width="464" height="6" fill="#000000" fill-opacity="0.22" />
+
+    <!-- ручки -->
+    <g fill={p.accent}>
+      <rect x="44" y="200" width="44" height="4" rx="2" />
+      <rect x="156" y="200" width="44" height="4" rx="2" />
+      <rect x="268" y="200" width="44" height="4" rx="2" />
+      <rect x="380" y="200" width="44" height="4" rx="2" />
+      <rect x="60" y="130" width="40" height="4" rx="2" />
+      <rect x="352" y="130" width="40" height="4" rx="2" />
+    </g>
+
+    <!-- мойка и смеситель -->
+    <rect x="150" y="178" width="66" height="10" rx="2" fill="#2E2E2C" fill-opacity="0.55" />
+    <path d="M183 178 v-24 h-12" stroke={p.accent} stroke-width="3" fill="none" stroke-linecap="round" />
+
+    <!-- предметы: доска и растение -->
+    <rect x="392" y="158" width="34" height="18" rx="3" fill={p.facade2} fill-opacity="0.9" />
+    <g>
+      <rect x="300" y="160" width="16" height="16" rx="2" fill={p.top} fill-opacity="0.7" />
+      <path d="M308 160c-8-6-10-16-4-22 5 4 8 12 4 22Z" fill={p.accent} fill-opacity="0.75" />
+      <path d="M308 160c8-5 12-14 8-21-6 3-10 11-8 21Z" fill={p.accent} fill-opacity="0.55" />
+    </g>
+
+    <!-- лёгкая тень под верхними -->
+    <rect x="0" y="148" width="480" height="6" fill="#000000" fill-opacity="0.08" />
+  </g>
+</svg>
+
+<style>
+  .krender {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

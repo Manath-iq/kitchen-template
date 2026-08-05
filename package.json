@@ -1,0 +1,30 @@
+{
+  "name": "kitchen-template",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Лэндинг-шаблон: кухни на заказ. Core + clientConfig.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "build:fast": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@fontsource-variable/jetbrains-mono": "^5.2.5",
+    "@fontsource-variable/onest": "^5.2.5",
+    "@fontsource-variable/unbounded": "^5.2.5",
+    "astro": "^5.13.5",
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.11"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@tailwindcss/vite": "^4.1.13",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "vite": "^6.4.3"
+  }
+}

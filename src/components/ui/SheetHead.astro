@@ -1,0 +1,15 @@
+---
+interface Props {
+  sheet: string;
+  label: string;
+  index?: string;
+}
+const { sheet, label, index } = Astro.props;
+---
+
+<div class="sheet-head">
+  <span class="tag tag-brass">{sheet}</span>
+  <span class="tag">{label}</span>
+  <span class="sheet-head__line" aria-hidden="true"></span>
+  {index && <span class="tag">{index}</span>}
+</div>

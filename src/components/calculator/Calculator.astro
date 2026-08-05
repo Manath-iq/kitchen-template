@@ -1,0 +1,597 @@
+---
+import { clientConfig } from '../../config/client';
+import { facadeOptions, hardwareOptions, shapeOptions, calcLimits } from '../../lib/pricing';
+import SheetHead from '../ui/SheetHead.astro';
+
+const c = clientConfig;
+
+const toggles = [
+  { id: 'install', label: 'Монтаж', hint: `+${c.pricing.installPrice.toLocaleString('ru-RU')} ₽`, checked: true },
+  { id: 'tech', label: 'Техника в проекте', hint: `+${c.pricing.techIntegration.toLocaleString('ru-RU')} ₽`, checked: false },
+  { id: 'delivery', label: 'Доставка', hint: `+${c.pricing.deliveryPrice.toLocaleString('ru-RU')} ₽`, checked: true },
+];
+---
+
+<section class="section" id="calculator">
+  <div class="container">
+    <SheetHead sheet="ЛИСТ 05" label="КАЛЬКУЛЯТОР" index="05 / 11" />
+
+    <div class="calc__intro">
+      <h2 class="h2" data-anim="rise">Посчитайте кухню по своим размерам</h2>
+      <p class="lead" data-anim="fade">Итог обновляется сразу, без звонка. Это ориентир, а не финальная смета.</p>
+    </div>
+
+    <form class="calc" data-calc novalidate>
+      <div class="calc__params paper ticks">
+        <!-- ДЛИНА -->
+        <div class="calc__field">
+          <div class="calc__field-head">
+            <label class="tag" for="calc-length">ДЛИНА ПО ФРОНТУ</label>
+            <output class="num calc__length" for="calc-length" data-calc-length>3,2 м</output>
+          </div>
+          <input
+            class="calc__range"
+            type="range"
+            id="calc-length"
+            name="length"
+            min={calcLimits.min}
+            max={calcLimits.max}
+            step={calcLimits.step}
+            value={calcLimits.default}
+            data-calc-range
+          />
+          <div class="calc__scale tag">
+            <span>{calcLimits.min.toString().replace('.', ',')} м</span>
+            <span>{calcLimits.max} м</span>
+          </div>
+        </div>
+
+        <!-- ФОРМА -->
+        <fieldset class="calc__field">
+          <legend class="tag">ФОРМА</legend>
+          <div class="calc__seg" data-calc-group="shape">
+            {shapeOptions.map((option, i) => (
+              <button
+                type="button"
+                class="calc__seg-btn"
+                data-value={option.id}
+                aria-pressed={i === 1 ? 'true' : 'false'}
+              >
+                <span>{option.label}</span>
+                <span class="tag calc__seg-hint">{option.hint}</span>
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+        <!-- ФАСАДЫ -->
+        <fieldset class="calc__field">
+          <legend class="tag">МАТЕРИАЛ ФАСАДОВ</legend>
+          <div class="calc__seg" data-calc-group="facade">
+            {facadeOptions.map((option, i) => (
+              <button
+                type="button"
+                class="calc__seg-btn"
+                data-value={option.id}
+                aria-pressed={i === 1 ? 'true' : 'false'}
+              >
+                <span>{option.label}</span>
+                <span class="tag calc__seg-hint">{option.hint}</span>
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+        <!-- ФУРНИТУРА -->
+        <fieldset class="calc__field">
+          <legend class="tag">ФУРНИТУРА</legend>
+          <div class="calc__seg" data-calc-group="hardware">
+            {hardwareOptions.map((option, i) => (
+              <button
+                type="button"
+                class="calc__seg-btn"
+                data-value={option.id}
+                aria-pressed={i === 1 ? 'true' : 'false'}
+              >
+                <span>{option.label}</span>
+                <span class="tag calc__seg-hint">{option.hint}</span>
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+        <!-- ОПЦИИ -->
+        <fieldset class="calc__field">
+          <legend class="tag">ДОПОЛНИТЕЛЬНО</legend>
+          <div class="calc__toggles">
+            {toggles.map((toggle) => (
+              <label class="calc__toggle">
+                <input type="checkbox" name={toggle.id} checked={toggle.checked} data-calc-toggle={toggle.id} />
+                <span class="calc__toggle-box" aria-hidden="true"></span>
+                <span class="calc__toggle-label">{toggle.label}</span>
+                <span class="tag calc__toggle-hint">{toggle.hint}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- РЕЗУЛЬТАТ -->
+      <aside class="calc__result" aria-live="polite">
+        <div class="calc__result-inner paper paper-ink">
+          <div class="calc__result-head">
+            <span class="tag">ВАШ ОРИЕНТИР</span>
+            <span class="tag num" data-calc-code>Р-3.2/УГЛ</span>
+          </div>
+
+          <p class="num calc__estimate" data-calc-estimate>0 ₽</p>
+          <p class="tag calc__range-line">
+            Диапазон: <span class="num" data-calc-range-line>—</span>
+          </p>
+
+          <div class="calc__scheme" data-calc-scheme></div>
+
+          <dl class="calc__breakdown" data-calc-breakdown></dl>
+
+          <p class="tag calc__delta">
+            Погрешность после замера: ±<span class="num">{c.pricing.deltaPercent}</span>%
+          </p>
+
+          <a
+            class="btn btn-wa btn-block"
+            href="#"
+            target="_blank"
+            rel="noopener"
+            data-calc-wa
+            data-goal="calculator_submit"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.41a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.4 1.02 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29Z"/>
+            </svg>
+            Получить смету в WhatsApp
+          </a>
+
+          <p class="tag calc__note">{c.disclaimers.priceNote}</p>
+        </div>
+      </aside>
+    </form>
+  </div>
+</section>
+
+<style>
+  .calc__intro {
+    display: grid;
+    gap: 12px;
+    max-width: 60ch;
+    margin-bottom: clamp(24px, 3vw, 36px);
+  }
+
+  .calc {
+    display: grid;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .calc__params {
+    padding: clamp(20px, 3vw, 32px);
+    display: grid;
+    gap: 26px;
+  }
+
+  .calc__field {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+  }
+
+  .calc__field-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .calc__length {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .calc__range {
+    width: 100%;
+    height: 28px;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .calc__range::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(
+      to right,
+      var(--color-brass) var(--pos, 30%),
+      rgba(75, 75, 75, 0.16) var(--pos, 30%)
+    );
+  }
+
+  .calc__range::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(75, 75, 75, 0.16);
+  }
+
+  .calc__range::-moz-range-progress {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--color-brass);
+  }
+
+  .calc__range::-webkit-slider-thumb {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    margin-top: -9px;
+    border-radius: 50%;
+    background: var(--color-paper-2);
+    border: 1.5px solid var(--color-ink);
+    box-shadow: 0 2px 6px rgba(75, 75, 75, 0.25);
+  }
+
+  .calc__range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-paper-2);
+    border: 1.5px solid var(--color-ink);
+  }
+
+  .calc__scale {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .calc__seg {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+    gap: 8px;
+  }
+
+  .calc__seg-btn {
+    display: grid;
+    gap: 2px;
+    min-height: 60px;
+    padding: 12px 14px;
+    text-align: left;
+    border-radius: var(--radius-input);
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.55);
+    font-family: inherit;
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: border-color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
+  }
+
+  .calc__seg-btn:hover {
+    border-color: var(--color-brass);
+  }
+
+  .calc__seg-btn[aria-pressed='true'] {
+    border-color: var(--color-green);
+    background: rgba(124, 143, 122, 0.16);
+  }
+
+  .calc__seg-hint {
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 0.74rem;
+  }
+
+  .calc__toggles {
+    display: grid;
+    gap: 8px;
+  }
+
+  .calc__toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 10px 14px;
+    border-radius: var(--radius-input);
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+  }
+
+  .calc__toggle input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .calc__toggle-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 1px solid var(--line-strong);
+    flex: none;
+    position: relative;
+    transition: background-color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+  }
+
+  .calc__toggle input:checked + .calc__toggle-box {
+    background: var(--color-green);
+    border-color: var(--color-green);
+  }
+
+  .calc__toggle input:checked + .calc__toggle-box::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: no-repeat center / 12px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 6.5 4.8 9 10 3.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+
+  .calc__toggle input:focus-visible + .calc__toggle-box {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 3px;
+  }
+
+  .calc__toggle-label {
+    font-weight: 500;
+  }
+
+  .calc__toggle-hint {
+    margin-left: auto;
+    text-transform: none;
+  }
+
+  .calc__result-inner {
+    padding: clamp(20px, 3vw, 30px);
+    display: grid;
+    gap: 14px;
+  }
+
+  .calc__result-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(247, 242, 234, 0.2);
+  }
+
+  .calc__estimate {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .calc__range-line,
+  .calc__delta,
+  .calc__note {
+    color: rgba(247, 242, 234, 0.7);
+    text-transform: none;
+    letter-spacing: 0.03em;
+  }
+
+  .calc__note {
+    font-size: 0.7rem;
+    line-height: 1.5;
+  }
+
+  .calc__scheme :global(svg) {
+    width: 100%;
+    height: auto;
+  }
+
+  .calc__breakdown {
+    margin: 0;
+    display: grid;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(247, 242, 234, 0.2);
+  }
+
+  .calc__breakdown > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.92rem;
+  }
+
+  .calc__breakdown dt {
+    color: rgba(247, 242, 234, 0.7);
+  }
+
+  .calc__breakdown dd {
+    margin: 0;
+    font-family: var(--font-data);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 960px) {
+    .calc {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    }
+
+    .calc__result-inner {
+      position: sticky;
+      top: 96px;
+    }
+  }
+</style>
+
+<script>
+  import { calcKitchen, defaultCalcInput, type CalcInput } from '../../lib/calcKitchen';
+  import { waCalcMessage } from '../../lib/waMessage';
+  import { formatMeters, formatNumber, formatRub } from '../../lib/format';
+  import { shapeCode, shapeLabel } from '../../lib/pricing';
+  import { reachGoal } from '../../lib/metrika';
+  import type { FacadeKey, HardwareKey, ShapeKey } from '../../config/client';
+
+  const form = document.querySelector<HTMLFormElement>('[data-calc]');
+  if (form) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const state: CalcInput = { ...defaultCalcInput };
+    let shown = 0;
+    let raf = 0;
+    let opened = false;
+
+    const els = {
+      range: form.querySelector<HTMLInputElement>('[data-calc-range]'),
+      length: form.querySelector<HTMLElement>('[data-calc-length]'),
+      estimate: form.querySelector<HTMLElement>('[data-calc-estimate]'),
+      rangeLine: form.querySelector<HTMLElement>('[data-calc-range-line]'),
+      breakdown: form.querySelector<HTMLElement>('[data-calc-breakdown]'),
+      wa: form.querySelector<HTMLAnchorElement>('[data-calc-wa]'),
+      code: form.querySelector<HTMLElement>('[data-calc-code]'),
+      scheme: form.querySelector<HTMLElement>('[data-calc-scheme]'),
+    };
+
+    const shapePaths: Record<ShapeKey, string[]> = {
+      straight: ['M20 74 H220 V90 H20 Z'],
+      corner: ['M20 74 H220 V90 H20 Z', 'M20 26 H36 V74 H20 Z'],
+      uShape: ['M20 74 H220 V90 H20 Z', 'M20 26 H36 V74 H20 Z', 'M204 26 H220 V74 H204 Z'],
+      island: ['M20 74 H220 V90 H20 Z', 'M92 36 H148 V52 H92 Z'],
+    };
+
+    function renderScheme() {
+      if (!els.scheme) return;
+      const paths = shapePaths[state.shape]
+        .map(
+          (d) =>
+            `<path d="${d}" fill="#C3A26A" fill-opacity="0.75" stroke="#C3A26A" stroke-opacity="0.9"/>`,
+        )
+        .join('');
+      els.scheme.innerHTML =
+        `<svg viewBox="0 0 240 104" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">` +
+        `<rect x="10" y="16" width="220" height="82" rx="6" stroke="#F7F2EA" stroke-opacity="0.28"/>` +
+        paths +
+        `<line x1="20" y1="100" x2="220" y2="100" stroke="#F7F2EA" stroke-opacity="0.4" stroke-dasharray="3 3"/>` +
+        `<text x="120" y="12" text-anchor="middle" fill="#F7F2EA" fill-opacity="0.7" font-size="9" font-family="var(--font-data)" letter-spacing="1">` +
+        `${formatMeters(state.length).toUpperCase()} · ${shapeLabel[state.shape].toUpperCase()}</text>` +
+        `</svg>`;
+    }
+
+    function paint() {
+      const result = calcKitchen(state);
+
+      if (els.length) els.length.textContent = formatMeters(state.length);
+      if (els.range) {
+        const pct =
+          ((state.length - Number(els.range.min)) / (Number(els.range.max) - Number(els.range.min))) * 100;
+        els.range.style.setProperty('--pos', `${pct}%`);
+      }
+      if (els.rangeLine) {
+        els.rangeLine.textContent = `${formatNumber(result.rangeMin)}–${formatNumber(result.rangeMax)} ₽`;
+      }
+      if (els.code) {
+        els.code.textContent = `Р-${state.length.toFixed(1).replace('.', ',')}/${shapeCode[state.shape]}`;
+      }
+      if (els.breakdown) {
+        els.breakdown.innerHTML = result.breakdown
+          .filter((row) => row.value > 0)
+          .map(
+            (row) =>
+              `<div><dt>${row.label}</dt><dd>${formatNumber(row.value)} ₽</dd></div>`,
+          )
+          .join('');
+      }
+      if (els.wa) els.wa.href = waCalcMessage(state, result);
+
+      renderScheme();
+
+      // Плавный счётчик итога. Конечное значение пишем сразу — если rAF
+      // не сработает (фоновая вкладка), число всё равно верное.
+      const target = result.estimate;
+      cancelAnimationFrame(raf);
+      if (els.estimate) els.estimate.textContent = formatRub(target);
+      if (reducedMotion || shown === 0) {
+        shown = target;
+        return;
+      }
+      const from = shown;
+      const start = performance.now();
+      const step = (now: number) => {
+        const t = Math.min((now - start) / 420, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        shown = from + (target - from) * eased;
+        if (els.estimate) els.estimate.textContent = formatRub(shown);
+        if (t < 1) raf = requestAnimationFrame(step);
+        else shown = target;
+      };
+      raf = requestAnimationFrame(step);
+    }
+
+    function markOpened() {
+      if (opened) return;
+      opened = true;
+      reachGoal('calculator_open');
+    }
+
+    els.range?.addEventListener('input', () => {
+      state.length = Number(els.range!.value);
+      markOpened();
+      paint();
+    });
+
+    form.querySelectorAll<HTMLElement>('[data-calc-group]').forEach((group) => {
+      group.addEventListener('click', (event) => {
+        const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.calc__seg-btn');
+        if (!button) return;
+        group.querySelectorAll<HTMLElement>('.calc__seg-btn').forEach((el) => {
+          el.setAttribute('aria-pressed', String(el === button));
+        });
+        const key = group.dataset.calcGroup;
+        const value = button.dataset.value ?? '';
+        if (key === 'shape') state.shape = value as ShapeKey;
+        if (key === 'facade') state.facade = value as FacadeKey;
+        if (key === 'hardware') state.hardware = value as HardwareKey;
+        markOpened();
+        paint();
+      });
+    });
+
+    form.querySelectorAll<HTMLInputElement>('[data-calc-toggle]').forEach((input) => {
+      input.addEventListener('change', () => {
+        const key = input.dataset.calcToggle;
+        if (key === 'install') state.needsInstall = input.checked;
+        if (key === 'tech') state.needsTech = input.checked;
+        if (key === 'delivery') state.needsDelivery = input.checked;
+        markOpened();
+        paint();
+      });
+    });
+
+    form.addEventListener('submit', (event) => event.preventDefault());
+
+    // Подхватываем форму из пройденного квиза, если она есть
+    try {
+      const saved = localStorage.getItem('kitchen:quiz');
+      if (saved) {
+        const parsed = JSON.parse(saved) as { answers?: { shape?: string; size?: string } };
+        const shape = parsed.answers?.shape;
+        if (shape && shape in shapePaths) {
+          state.shape = shape as ShapeKey;
+          form
+            .querySelector<HTMLElement>(`[data-calc-group="shape"] [data-value="${shape}"]`)
+            ?.setAttribute('aria-pressed', 'true');
+          form
+            .querySelectorAll<HTMLElement>(`[data-calc-group="shape"] .calc__seg-btn`)
+            .forEach((el) => {
+              if (el.dataset.value !== shape) el.setAttribute('aria-pressed', 'false');
+            });
+        }
+      }
+    } catch {
+      /* нет доступа к localStorage — работаем со значениями по умолчанию */
+    }
+
+    paint();
+  }
+</script>

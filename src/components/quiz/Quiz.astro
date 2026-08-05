@@ -1,0 +1,623 @@
+---
+import { quizSteps } from '../../lib/quizMatrix';
+import { clientConfig } from '../../config/client';
+import SheetHead from '../ui/SheetHead.astro';
+
+const c = clientConfig;
+---
+
+<section class="section" id="quiz">
+  <div class="container">
+    <SheetHead sheet="ЛИСТ 04" label="ПОДБОР" index="04 / 11" />
+
+    <div class="quiz__intro">
+      <h2 class="h2" data-anim="rise">Подберите кухню за 30 секунд</h2>
+      <p class="lead" data-anim="fade">Ответ сразу покажем на экране — форма, бюджет и срок, без звонка.</p>
+    </div>
+
+    <div class="quiz paper ticks" data-quiz>
+      <div class="quiz__main">
+        <div class="quiz__bar">
+          <div class="quiz__bar-head">
+            <span class="tag">ВОПРОС <span class="num" data-quiz-current>1</span> ИЗ <span class="num">{quizSteps.length}</span></span>
+            <span class="tag num" data-quiz-percent>0%</span>
+          </div>
+          <div class="quiz__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-quiz-progress>
+            <span class="quiz__track-fill" data-quiz-fill></span>
+          </div>
+        </div>
+
+        <div class="quiz__steps" data-quiz-steps aria-live="polite">
+          {quizSteps.map((step, index) => (
+            <fieldset class="quiz__step" data-step={step.id} data-index={index} hidden={index !== 0}>
+              <legend class="quiz__legend">
+                <span class="tag tag-brass">{step.code}</span>
+                <span class="h3 quiz__question">{step.question}</span>
+              </legend>
+
+              <div class="quiz__options">
+                {step.options.map((option) => (
+                  <button
+                    type="button"
+                    class="option"
+                    data-value={option.id}
+                    data-selected="false"
+                  >
+                    <span class="option__label">{option.label}</span>
+                    <span class="tag option__hint">{option.hint}</span>
+                    <span class="option__stamp" aria-hidden="true">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M2 6.5 4.8 9 10 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+          ))}
+        </div>
+
+        <div class="quiz__foot">
+          <button type="button" class="btn btn-ghost btn-sm" data-quiz-back hidden>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M14 8H3M7 4 3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Назад
+          </button>
+          <p class="tag quiz__foot-note">Тап по ответу — переход дальше. Кнопка «Далее» не нужна.</p>
+        </div>
+      </div>
+
+      <aside class="quiz__side" aria-label="Ваш выбор">
+        <div class="quiz__side-inner">
+          <div class="quiz__side-head">
+            <span class="tag tag-brass">ВАШ ВЫБОР</span>
+            <span class="tag">СВОДКА</span>
+          </div>
+
+          <dl class="quiz__summary">
+            {quizSteps.map((step) => (
+              <div class="quiz__summary-row" data-summary-row={step.id}>
+                <dt class="tag">{step.summaryLabel}</dt>
+                <dd class="quiz__summary-value">—</dd>
+              </div>
+            ))}
+          </dl>
+
+          <p class="tag quiz__side-note">{c.disclaimers.priceNote}</p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- РЕЗУЛЬТАТ -->
+    <div class="qres paper ticks" data-quiz-result hidden>
+      <div class="qres__main">
+        <div class="qres__head">
+          <span class="tag tag-brass">РЕЗУЛЬТАТ ПОДБОРА</span>
+          <span class="tag" data-res-code>К-01</span>
+        </div>
+
+        <h3 class="h2 qres__title">Ваш вариант кухни</h3>
+
+        <dl class="qres__spec">
+          <div><dt class="tag">ФОРМА</dt><dd data-res-shape>—</dd></div>
+          <div><dt class="tag">ДЛИНА</dt><dd data-res-size>—</dd></div>
+          <div><dt class="tag">МАТЕРИАЛ</dt><dd data-res-material>—</dd></div>
+          <div><dt class="tag">СТАРТ</dt><dd data-res-urgency>—</dd></div>
+        </dl>
+
+        <div class="qres__budget">
+          <span class="tag">БЮДЖЕТ</span>
+          <p class="num qres__budget-value" data-res-budget>—</p>
+          <span class="tag qres__budget-note">Диапазон до замера · ±{c.pricing.deltaPercent}%</span>
+        </div>
+
+        <div class="qres__lead">
+          <span class="tag">СРОК</span>
+          <p class="num qres__lead-value" data-res-days>—</p>
+        </div>
+
+        <ul class="qres__included">
+          <li>Замер</li>
+          <li>3D-проект</li>
+          <li>Смета до запуска</li>
+        </ul>
+
+        <div class="qres__actions">
+          <a class="btn btn-wa" href="#" target="_blank" rel="noopener" data-res-wa data-goal="wa_click_result">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.41a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.4 1.02 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29Z"/>
+            </svg>
+            Отправить результат в WhatsApp
+          </a>
+          <button type="button" class="btn btn-ghost" data-quiz-restart>Пройти заново</button>
+          <a class="btn btn-ghost" href="#calculator" data-goal="calculator_open">Уточнить в калькуляторе</a>
+        </div>
+
+        <p class="tag qres__pdn">{c.disclaimers.pdn}</p>
+      </div>
+
+      <div class="qres__side paper-cool">
+        <span class="tag">МИНИ-СХЕМА</span>
+        <div class="qres__plan" data-res-plan></div>
+        <p class="tag qres__side-note">Схема условная. Точная конфигурация — после замера.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quiz__intro {
+    display: grid;
+    gap: 12px;
+    max-width: 60ch;
+    margin-bottom: clamp(24px, 3vw, 36px);
+  }
+
+  .quiz {
+    display: grid;
+    overflow: hidden;
+  }
+
+  .quiz[hidden] {
+    display: none;
+  }
+
+  .quiz__main {
+    padding: clamp(20px, 3vw, 34px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-height: 420px;
+  }
+
+  .quiz__bar-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .quiz__track {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(75, 75, 75, 0.14);
+    overflow: hidden;
+  }
+
+  .quiz__track-fill {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--color-brass);
+    transition: width 0.45s var(--ease-out);
+  }
+
+  .quiz__steps {
+    flex: 1;
+  }
+
+  .quiz__step {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .quiz__step[hidden] {
+    display: none;
+  }
+
+  .quiz__legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding: 0;
+  }
+
+  .quiz__question {
+    display: block;
+  }
+
+  .quiz__options {
+    display: grid;
+    gap: 10px;
+  }
+
+  .option__label {
+    font-size: 1.02rem;
+    font-weight: 500;
+  }
+
+  .option__hint {
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 0.78rem;
+  }
+
+  .quiz__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+
+  .quiz__foot-note {
+    text-transform: none;
+    letter-spacing: 0.02em;
+    color: var(--color-muted);
+  }
+
+  .quiz__side {
+    border-top: 1px solid var(--line);
+    background: rgba(232, 236, 239, 0.55);
+    padding: clamp(18px, 2.4vw, 26px);
+  }
+
+  .quiz__side-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .quiz__summary {
+    margin: 14px 0 18px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .quiz__summary-row {
+    display: grid;
+    gap: 2px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .quiz__summary-row dd {
+    margin: 0;
+    font-weight: 500;
+    color: var(--color-muted);
+  }
+
+  .quiz__summary-row[data-filled='true'] dd {
+    color: var(--color-ink);
+  }
+
+  .quiz__side-note,
+  .qres__side-note {
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 0.72rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+
+  /* ---------- РЕЗУЛЬТАТ ---------- */
+
+  .qres {
+    display: grid;
+    overflow: hidden;
+  }
+
+  .qres[hidden] {
+    display: none;
+  }
+
+  .qres__main {
+    padding: clamp(20px, 3vw, 34px);
+    display: grid;
+    gap: 18px;
+    align-content: start;
+  }
+
+  .qres__head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .qres__title {
+    font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  }
+
+  .qres__spec {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
+  }
+
+  .qres__spec dd {
+    margin: 2px 0 0;
+    font-weight: 500;
+  }
+
+  .qres__budget {
+    padding: 18px 20px;
+    border-radius: var(--radius-input);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    display: grid;
+    gap: 4px;
+  }
+
+  .qres__budget .tag {
+    color: rgba(247, 242, 234, 0.66);
+  }
+
+  .qres__budget-value {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .qres__budget-note {
+    text-transform: none;
+    letter-spacing: 0.04em;
+  }
+
+  .qres__lead {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .qres__lead-value {
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  .qres__included {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .qres__included li {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(124, 143, 122, 0.14);
+    font-size: 0.85rem;
+  }
+
+  .qres__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .qres__pdn {
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 0.72rem;
+    line-height: 1.5;
+  }
+
+  .qres__side {
+    padding: clamp(18px, 2.4vw, 26px);
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+
+  .qres__plan :global(svg) {
+    width: 100%;
+    max-width: 240px;
+    height: auto;
+  }
+
+  @media (min-width: 900px) {
+    .quiz,
+    .qres {
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    }
+
+    .quiz__options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .quiz__side,
+    .qres__side {
+      border-top: 0;
+      border-left: 1px solid var(--line);
+    }
+
+    .quiz__side-inner {
+      position: sticky;
+      top: 96px;
+    }
+  }
+</style>
+
+<script>
+  import { quizSteps, calcQuiz, type QuizStepId } from '../../lib/quizMatrix';
+  import { waQuizMessage } from '../../lib/waMessage';
+  import { formatDays, formatNumber } from '../../lib/format';
+  import { reachGoal } from '../../lib/metrika';
+
+  const root = document.querySelector<HTMLElement>('[data-quiz]');
+  const result = document.querySelector<HTMLElement>('[data-quiz-result]');
+  if (root && result) {
+    const stepEls = Array.from(root.querySelectorAll<HTMLFieldSetElement>('.quiz__step'));
+    const fill = root.querySelector<HTMLElement>('[data-quiz-fill]');
+    const progress = root.querySelector<HTMLElement>('[data-quiz-progress]');
+    const percentEl = root.querySelector<HTMLElement>('[data-quiz-percent]');
+    const currentEl = root.querySelector<HTMLElement>('[data-quiz-current]');
+    const backBtn = root.querySelector<HTMLButtonElement>('[data-quiz-back]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const answers: Partial<Record<QuizStepId, string>> = {};
+    let index = 0;
+    let started = false;
+
+    const planPaths: Record<string, string[]> = {
+      straight: ['M18 62 H102 V76 H18 Z'],
+      corner: ['M18 62 H102 V76 H18 Z', 'M18 22 H32 V62 H18 Z'],
+      uShape: ['M18 62 H102 V76 H18 Z', 'M18 22 H32 V62 H18 Z', 'M88 22 H102 V62 H88 Z'],
+      island: ['M18 62 H102 V76 H18 Z', 'M44 30 H76 V44 H44 Z'],
+    };
+
+    function renderPlan(shape: string) {
+      const host = result!.querySelector<HTMLElement>('[data-res-plan]');
+      if (!host) return;
+      const paths = (planPaths[shape] ?? planPaths.straight!)
+        .map(
+          (d) =>
+            `<path d="${d}" fill="#D9C7AE" fill-opacity="0.9" stroke="#8A7657" stroke-opacity="0.6"/>`,
+        )
+        .join('');
+      host.innerHTML =
+        `<svg viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">` +
+        `<rect x="10" y="14" width="100" height="70" rx="4" stroke="#4B4B4B" stroke-opacity="0.35"/>` +
+        `<line x1="10" y1="84" x2="110" y2="84" stroke="#4B4B4B" stroke-opacity="0.5" stroke-width="1.5"/>` +
+        paths +
+        `<line x1="18" y1="82" x2="102" y2="82" stroke="#C3A26A" stroke-width="1.5"/>` +
+        `</svg>`;
+    }
+
+    function setProgress() {
+      const value = Math.round((Object.keys(answers).length / quizSteps.length) * 100);
+      if (fill) fill.style.width = `${value}%`;
+      if (percentEl) percentEl.textContent = `${value}%`;
+      if (currentEl) currentEl.textContent = String(Math.min(index + 1, quizSteps.length));
+      progress?.setAttribute('aria-valuenow', String(value));
+    }
+
+    function show(next: number) {
+      index = next;
+      stepEls.forEach((el, i) => {
+        el.hidden = i !== next;
+      });
+      if (backBtn) backBtn.hidden = next === 0;
+      setProgress();
+      const focusable = stepEls[next]?.querySelector<HTMLButtonElement>('.option');
+      focusable?.focus({ preventScroll: true });
+    }
+
+    function countUp(el: HTMLElement, from: number, to: number, suffix: string) {
+      // Итог пишем сразу: если rAF не сработает (фоновая вкладка, экономия
+      // батареи), пользователь всё равно видит число, а не прочерк.
+      el.textContent = `${formatNumber(to)} ${suffix}`;
+      if (reducedMotion) return;
+      const start = performance.now();
+      const duration = 700;
+      const tick = (now: number) => {
+        const t = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = `${formatNumber(from + (to - from) * eased)} ${suffix}`;
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    function finish() {
+      const data = calcQuiz(answers as Required<typeof answers>);
+      const set = (sel: string, value: string) => {
+        const el = result!.querySelector<HTMLElement>(sel);
+        if (el) el.textContent = value;
+      };
+
+      set('[data-res-shape]', data.shape);
+      set('[data-res-size]', data.size);
+      set('[data-res-material]', data.material);
+      set('[data-res-urgency]', data.urgencyTag);
+      set('[data-res-days]', formatDays(data.daysMin, data.daysMax));
+      set('[data-res-code]', `К-${String(quizSteps.length).padStart(2, '0')}`);
+
+      const wa = result!.querySelector<HTMLAnchorElement>('[data-res-wa]');
+      if (wa) wa.href = waQuizMessage(data);
+
+      renderPlan(answers.shape ?? 'straight');
+
+      root!.hidden = true;
+      result!.hidden = false;
+      result!.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
+
+      const budget = result!.querySelector<HTMLElement>('[data-res-budget]');
+      if (budget) {
+        countUp(
+          budget,
+          data.estimateMin * 0.6,
+          data.estimateMin,
+          `–${formatNumber(data.estimateMax)} ₽`,
+        );
+      }
+
+      try {
+        localStorage.setItem('kitchen:quiz', JSON.stringify({ answers, data, ts: Date.now() }));
+      } catch {
+        /* приватный режим — просто не сохраняем */
+      }
+
+      reachGoal('quiz_complete');
+    }
+
+    root.addEventListener('click', (event) => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.option');
+      if (!button) return;
+
+      const step = quizSteps[index];
+      if (!step) return;
+
+      if (!started) {
+        started = true;
+        reachGoal('quiz_start');
+      }
+
+      const value = button.dataset.value ?? '';
+      answers[step.id] = value;
+
+      stepEls[index]
+        ?.querySelectorAll<HTMLElement>('.option')
+        .forEach((el) => el.setAttribute('data-selected', String(el === button)));
+
+      const row = root.querySelector<HTMLElement>(`[data-summary-row="${step.id}"] dd`);
+      if (row) {
+        row.textContent = step.options.find((o) => o.id === value)?.label ?? '—';
+        row.parentElement?.setAttribute('data-filled', 'true');
+      }
+
+      setProgress();
+
+      window.setTimeout(
+        () => {
+          if (index + 1 < quizSteps.length) show(index + 1);
+          else finish();
+        },
+        reducedMotion ? 0 : 240,
+      );
+    });
+
+    backBtn?.addEventListener('click', () => {
+      if (index > 0) show(index - 1);
+    });
+
+    result.querySelector<HTMLButtonElement>('[data-quiz-restart]')?.addEventListener('click', () => {
+      (Object.keys(answers) as QuizStepId[]).forEach((key) => delete answers[key]);
+      root.querySelectorAll<HTMLElement>('.option').forEach((el) => el.setAttribute('data-selected', 'false'));
+      root.querySelectorAll<HTMLElement>('.quiz__summary-row').forEach((el) => {
+        el.removeAttribute('data-filled');
+        const dd = el.querySelector('dd');
+        if (dd) dd.textContent = '—';
+      });
+      result.hidden = true;
+      root.hidden = false;
+      show(0);
+      root.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
+    });
+
+    setProgress();
+  }
+</script>

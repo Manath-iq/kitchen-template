@@ -1,0 +1,294 @@
+---
+import { clientConfig, heroTitle } from '../config/client';
+import { formatNumber } from '../lib/format';
+import { waDefault } from '../lib/waMessage';
+import KitchenSpec from './svg/KitchenSpec.astro';
+
+const c = clientConfig;
+const priceFrom = c.pricing.price24m;
+const priceTo = c.pricing.price4m * 2;
+---
+
+<section class="hero" id="top" data-hero>
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="tag tag-brass hero__kicker" data-anim="fade">
+        КУХНИ НА ЗАКАЗ / {c.city.toUpperCase()} / {c.region.toUpperCase()}
+      </p>
+
+      <h1 class="h1 hero__title" data-anim="title">{heroTitle}</h1>
+
+      <p class="lead hero__lead" data-anim="fade">
+        {c.heroSubtitle}<br />{c.heroNote}
+      </p>
+
+      <div class="hero__ctas" data-anim="fade">
+        <a class="btn btn-primary" href="#quiz" data-goal="hero_cta_click">
+          {c.heroCtas.primary}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a class="btn btn-ghost" href="#calculator" data-goal="calculator_open">
+          {c.heroCtas.secondary}
+        </a>
+      </div>
+
+      <ul class="hero__chips" data-anim="fade">
+        {c.heroChips.map((chip) => (
+          <li class="hero__chip">
+            <span class="hero__chip-dot" aria-hidden="true"></span>
+            <span class="tag">{chip}</span>
+          </li>
+        ))}
+      </ul>
+
+      <dl class="hero__facts" data-anim="fade">
+        <div class="hero__fact">
+          <dt class="tag">ЗАМЕР</dt>
+          <dd class="num hero__fact-value">до {c.trust.measureHours} ч</dd>
+        </div>
+        <div class="hero__fact">
+          <dt class="tag">СРОК</dt>
+          <dd class="num hero__fact-value">{c.leadTimeText.split(' ')[0]} дней</dd>
+        </div>
+        <div class="hero__fact">
+          <dt class="tag">ГАРАНТИЯ</dt>
+          <dd class="num hero__fact-value">{c.warranty}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="hero__visual">
+      <div class="hero__sheet paper ticks" data-spec>
+        <div class="hero__sheet-head">
+          <span class="tag tag-brass">СПЕЦИФИКАЦИЯ</span>
+          <span class="hero__sheet-line" aria-hidden="true"></span>
+          <span class="tag">УГЛОВАЯ / 3,6 М / МДФ</span>
+        </div>
+
+        <KitchenSpec class="hero__spec" />
+
+        <div class="hero__legend">
+          {['Корпус', 'Верхние модули', 'Фасады', 'Фурнитура', 'Столешница'].map((label, i) => (
+            <span class="hero__legend-item" data-legend={i + 1}>
+              <span class="num hero__legend-num">{String(i + 1).padStart(2, '0')}</span>
+              {label}
+            </span>
+          ))}
+        </div>
+
+        <div class="hero__summary" data-summary>
+          <div>
+            <span class="tag">ИТОГОВАЯ СМЕТА</span>
+            <p class="num hero__summary-value">{formatNumber(priceFrom)}–{formatNumber(priceTo)} ₽</p>
+          </div>
+          <a class="btn btn-wa btn-sm hero__wa" href={waDefault} target="_blank" rel="noopener" data-goal="wa_click_hero" data-wa>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.41a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.4 1.02 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29Z"/>
+            </svg>
+            <span data-wa-label>Написать в WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <p class="tag hero__note">{c.disclaimers.priceNote}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(32px, 5vw, 72px) clamp(48px, 7vw, 96px);
+    position: relative;
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: clamp(32px, 5vw, 56px);
+    align-items: center;
+  }
+
+  .hero__kicker {
+    margin-bottom: 20px;
+  }
+
+  .hero__title {
+    /* чуть плотнее общей шкалы: заголовок длинный, а первый экран должен
+       показывать ещё и обе CTA */
+    font-size: clamp(2rem, 4.4vw, 3.6rem);
+    margin-bottom: 22px;
+    max-width: 17ch;
+  }
+
+  @media (max-width: 640px) {
+    .hero__ctas .btn {
+      flex: 1 1 100%;
+    }
+  }
+
+  .hero__lead {
+    max-width: 46ch;
+    margin-bottom: 32px;
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .hero__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+  }
+
+  .hero__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero__chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-green);
+  }
+
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+
+  .hero__fact {
+    padding-right: clamp(20px, 4vw, 44px);
+    margin-right: clamp(20px, 4vw, 44px);
+    border-right: 1px solid var(--line);
+  }
+
+  .hero__fact:last-child {
+    border-right: 0;
+    margin-right: 0;
+    padding-right: 0;
+  }
+
+  .hero__fact-value {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .hero__sheet {
+    padding: clamp(16px, 2.4vw, 26px);
+  }
+
+  .hero__sheet-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .hero__sheet-line {
+    flex: 1;
+    height: 1px;
+    background: var(--line-strong);
+  }
+
+  .hero__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-size: 0.82rem;
+    color: var(--color-muted);
+  }
+
+  .hero__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.42;
+    transition: opacity 0.4s var(--ease-out), color 0.4s var(--ease-out);
+  }
+
+  .hero__legend-item[data-on='true'] {
+    opacity: 1;
+    color: var(--color-ink);
+  }
+
+  .hero__legend-num {
+    font-size: 0.7rem;
+    color: #8d6f3c;
+  }
+
+  .hero__summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: var(--radius-input);
+    background: rgba(232, 236, 239, 0.7);
+    border: 1px solid var(--line);
+  }
+
+  .hero__summary-value {
+    font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .hero__wa {
+    transition: background-color 0.35s var(--ease-out);
+  }
+
+  .hero__note {
+    margin-top: 14px;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: none;
+    line-height: 1.5;
+    max-width: 52ch;
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      /* svh, а не vh: на мобильных браузерах адресная строка не должна
+         рвать закреплённый первый экран */
+      min-height: calc(100svh - 92px);
+      display: flex;
+      align-items: center;
+      padding-block: 24px 40px;
+    }
+
+    .hero__grid {
+      grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+      gap: clamp(40px, 4vw, 68px);
+      width: 100%;
+    }
+
+    .hero__lead {
+      margin-bottom: 26px;
+    }
+
+    .hero__chips,
+    .hero__ctas {
+      margin-bottom: 20px;
+    }
+  }
+</style>
