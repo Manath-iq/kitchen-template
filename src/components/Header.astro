@@ -1,19 +1,21 @@
 ---
 import { clientConfig } from '../config/client';
-import { withBase } from '../lib/url';
+import { sectionHref, withBase } from '../lib/url';
 
 const c = clientConfig;
+const link = (hash: string) => sectionHref(Astro.url.pathname, hash);
+
 const nav = [
-  { href: '#services', label: 'Услуги' },
-  { href: '#materials', label: 'Материалы' },
-  { href: '#calculator', label: 'Калькулятор' },
-  { href: '#contacts', label: 'Контакты' },
+  { href: link('#services'), label: 'Услуги' },
+  { href: link('#materials'), label: 'Материалы' },
+  { href: link('#calculator'), label: 'Калькулятор' },
+  { href: link('#contacts'), label: 'Контакты' },
 ];
 ---
 
 <header class="hdr" id="header" data-header>
   <div class="container hdr__inner">
-    <a class="hdr__brand" href="#top" aria-label={`${c.companyName} — на главную`}>
+    <a class="hdr__brand" href={link('#top')} aria-label={`${c.companyName} — на главную`}>
       <img src={withBase(c.brand.logoPath)} width="40" height="40" alt="" class="hdr__logo" />
       <span class="hdr__name">
         <span class="hdr__title">{c.companyName}</span>
@@ -29,7 +31,7 @@ const nav = [
       <a class="hdr__phone num" href={`tel:${c.phone.replace(/[^\d+]/g, '')}`} data-goal="phone_click">
         {c.phone}
       </a>
-      <a class="btn btn-primary btn-sm" href="#quiz" data-goal="hero_cta_click">Рассчитать кухню</a>
+      <a class="btn btn-primary btn-sm" href={link('#quiz')} data-goal="hero_cta_click">Рассчитать кухню</a>
     </div>
 
     <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="mobile-menu" data-burger>

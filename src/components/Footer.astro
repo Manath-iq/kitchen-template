@@ -1,9 +1,10 @@
 ---
 import { clientConfig } from '../config/client';
-import { withBase } from '../lib/url';
+import { sectionHref, withBase } from '../lib/url';
 
 const c = clientConfig;
 const year = new Date().getFullYear();
+const link = (hash: string) => sectionHref(Astro.url.pathname, hash);
 ---
 
 <footer class="ftr">
@@ -18,11 +19,11 @@ const year = new Date().getFullYear();
       </div>
 
       <nav class="ftr__nav" aria-label="Подвал">
-        <a href="#services">Услуги</a>
-        <a href="#materials">Материалы</a>
-        <a href="#calculator">Калькулятор</a>
-        <a href="#portfolio">Работы</a>
-        <a href="#contacts">Контакты</a>
+        <a href={link('#services')}>Услуги</a>
+        <a href={link('#materials')}>Материалы</a>
+        <a href={link('#calculator')}>Калькулятор</a>
+        <a href={link('#portfolio')}>Работы</a>
+        <a href={link('#contacts')}>Контакты</a>
       </nav>
 
       <div class="ftr__contacts">
