@@ -44,6 +44,12 @@ unicode-range:${range};}`,
   .join('\n');
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com').href;
 
+/**
+ * Микроразметка настоящего бизнеса — только когда бизнес настоящий.
+ * В демо-режиме адрес, телефон и часы работы это заглушки, и отдавать их
+ * поисковику как LocalBusiness нельзя: он ставит такие карточки в локальную
+ * выдачу, и человек приходит по адресу, которого не существует.
+ */
 const localBusiness = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
@@ -72,6 +78,13 @@ const localBusiness = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {
+      /* Демо закрыто от индексации: оно не должно занимать выдачу по
+         коммерческим запросам вместо настоящих мастерских. follow, а не
+         nofollow, — ссылка на автора в подвале должна работать.
+         Под живого клиента demoMode выключается, и страница индексируется. */
+      c.demoMode && <meta name="robots" content="noindex, follow" />
+    }
     <meta name="theme-color" content="#F7F2EA" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -121,11 +134,15 @@ const localBusiness = {
       })();
     </script>
 
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify(localBusiness)}
-      is:inline
-    />
+    {
+      !c.demoMode && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(localBusiness)}
+          is:inline
+        />
+      )
+    }
     {
       schema.map((item) => (
         <script type="application/ld+json" set:html={JSON.stringify(item)} is:inline />
