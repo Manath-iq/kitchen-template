@@ -2,11 +2,9 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
-// Деплой: GitHub Pages (project site) → https://manath-iq.github.io/kitchen-template/
-// Для кастомного домена клиента: site = 'https://domain.ru', base = '/'.
+// Публикуется на собственном поддомене, в корне — base не нужен.
 export default defineConfig({
-  site: 'https://manath-iq.github.io',
-  base: '/kitchen-template',
+  site: 'https://kitchen-template.manath.site',
   trailingSlash: 'ignore',
   build: {
     inlineStylesheets: 'auto',
